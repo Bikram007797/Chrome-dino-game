@@ -2,63 +2,60 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>ZenRex Runner — Calm Endless Runner</title>
+  <title>ZenRex Runner ✨</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <style>
     html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
+      margin:0; padding:0;
+      width:100%; height:100%;
+      overflow:hidden;
       font-family: sans-serif;
-      background: #f2f5f2;
+      background: #f0f5f0;
       position: relative;
     }
     .screen {
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top:0; left:0;
+      width:100%; height:100%;
       display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      background: #f2f5f2;
+      background: #f0f5f0;
     }
-    .screen.active {
+    .active {
       display: flex;
     }
     .loader {
       border: 6px solid #ddd;
       border-top: 6px solid #4a896d;
       border-radius: 50%;
-      width: 60px; height: 60px;
+      width:60px; height:60px;
       animation: spin 1s linear infinite;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
     button {
-      padding: 12px 24px;
-      margin: 10px;
-      font-size: 1.1rem;
-      border: none;
-      border-radius: 8px;
-      background: #4a896d;
-      color: white;
-      cursor: pointer;
-      transition: transform 0.2s;
+      padding:12px 24px;
+      margin: 8px;
+      font-size:1rem;
+      border:none;
+      border-radius:8px;
+      background:#4a896d;
+      color:#fff;
+      cursor:pointer;
     }
     button:active {
       transform: scale(0.95);
     }
     canvas {
-      border: 2px solid #aaa;
-      border-radius: 8px;
-      background: #fff;
-      touch-action: none;
+      border:2px solid #999;
+      border-radius:8px;
+      background:#fff;
+      touch-action:none;
     }
     #topBar {
       width: 90%;
@@ -75,15 +72,14 @@
   </style>
 </head>
 <body>
-
-  <!-- LOADING -->
+  <!-- Loading -->
   <div id="loading" class="screen active">
     <div class="loader"></div>
     <h1>ZenRex Runner 🦖</h1>
     <p>Loading peaceful vibes… 🌿</p>
   </div>
 
-  <!-- TITLE -->
+  <!-- Title -->
   <div id="title" class="screen">
     <h1>ZenRex Runner 🦖</h1>
     <p>“Run free, stay calm, be zen.”</p>
@@ -91,7 +87,7 @@
     <button id="btnEnter">Enter</button>
   </div>
 
-  <!-- MENU -->
+  <!-- Menu -->
   <div id="menu" class="screen">
     <h1>ZenRex Runner</h1>
     <button id="btnStart">Start Game 🎮</button>
@@ -99,43 +95,43 @@
     <button id="btnAbout">About ℹ️</button>
   </div>
 
-  <!-- STATS -->
+  <!-- Stats -->
   <div id="stats" class="screen">
     <h1>Statistics</h1>
     <p>Best Score: <span id="bestScore">0</span></p>
     <button id="btnStatsBack">Back</button>
   </div>
 
-  <!-- ABOUT -->
+  <!-- About -->
   <div id="about" class="screen">
     <h1>About</h1>
     <p>ZenRex Runner is a calm endless runner game inspired by Japanese Zen culture 🌿.</p>
-    <p>Developed by Bikram ✨</p>
+    <p>Developed by Bikram</p>
     <button id="btnAboutBack">Back</button>
   </div>
 
-  <!-- GAME -->
+  <!-- Game -->
   <div id="game" class="screen">
     <div id="topBar">
       <div>Score: <span id="scoreDisplay">0</span></div>
       <div>Best: <span id="bestDisplay">0</span></div>
     </div>
     <div id="topButtons">
-      <button id="btnPause">Pause ⏸️</button>
-      <button id="btnRestart">Restart 🔁</button>
-      <button id="btnMainMenu">Menu 🏠</button>
+      <button id="btnPause">Pause</button>
+      <button id="btnRestart">Restart</button>
+      <button id="btnMainMenu">Menu</button>
     </div>
     <canvas id="canvasGame"></canvas>
     <button id="btnJump">Jump ⬆️</button>
   </div>
 
-  <!-- PAUSE -->
+  <!-- Pause -->
   <div id="pause" class="screen">
     <h1>Paused</h1>
     <button id="btnResume">Resume ▶️</button>
   </div>
 
-  <!-- RESULT -->
+  <!-- Result -->
   <div id="result" class="screen">
     <h1>Game Over</h1>
     <p>Your Score: <span id="finalScore">0</span></p>
@@ -144,205 +140,176 @@
   </div>
 
 <script>
-// — Utility & State Management —
-
-function $(id) { return document.getElementById(id); }
-const screens = {
-  loading: $('loading'),
-  title: $('title'),
-  menu: $('menu'),
-  stats: $('stats'),
-  about: $('about'),
-  game: $('game'),
-  pause: $('pause'),
-  result: $('result')
-};
-function showScreen(name) {
-  for (let k in screens) {
-    screens[k].classList.remove('active');
+  const $ = id => document.getElementById(id);
+  const screens = {
+    loading: $('loading'),
+    title: $('title'),
+    menu: $('menu'),
+    stats: $('stats'),
+    about: $('about'),
+    game: $('game'),
+    pause: $('pause'),
+    result: $('result')
+  };
+  function showScreen(name) {
+    for (let k in screens) screens[k].classList.remove('active');
+    screens[name].classList.add('active');
+    current = name;
   }
-  screens[name].classList.add('active');
-  currentScreen = name;
-}
 
-// Storage
-let bestScore = parseInt(localStorage.getItem('zenrex_best') || '0', 10);
+  let best = parseInt(localStorage.getItem('zenrex_best') || '0', 10);
 
-// After 3 seconds, move from loading → title
-setTimeout(()=> {
-  showScreen('title');
-}, 3000);
+  // after 3s, go to title
+  setTimeout(() => {
+    showScreen('title');
+  }, 3000);
 
-// Button wiring
-$('btnEnter').onclick = () => { showScreen('menu'); };
-$('btnStart').onclick = () => { startGame(); };
-$('btnStats').onclick = () => {
-  $('bestScore').innerText = bestScore;
-  showScreen('stats');
-};
-$('btnAbout').onclick = () => showScreen('about');
-$('btnStatsBack').onclick = () => showScreen('menu');
-$('btnAboutBack').onclick = () => showScreen('menu');
-$('btnPause').onclick = () => pauseGame();
-$('btnResume').onclick = () => resumeGame();
-$('btnRestart').onclick = () => startGame();
-$('btnMainMenu').onclick = () => {
-  stopGame();
-  showScreen('menu');
-};
-$('btnNext').onclick = () => startGame();
-$('btnResultMenu').onclick = () => {
-  showScreen('menu');
-};
+  // Button wiring
+  $('btnEnter').onclick = () => showScreen('menu');
+  $('btnStart').onclick = () => { startGame(); };
+  $('btnStats').onclick = () => {
+    $('bestScore').innerText = best;
+    showScreen('stats');
+  };
+  $('btnAbout').onclick = () => showScreen('about');
+  $('btnStatsBack').onclick = () => showScreen('menu');
+  $('btnAboutBack').onclick = () => showScreen('menu');
+  $('btnPause').onclick = () => pauseGame();
+  $('btnResume').onclick = () => resumeGame();
+  $('btnRestart').onclick = () => startGame();
+  $('btnMainMenu').onclick = () => { stopGame(); showScreen('menu'); };
+  $('btnNext').onclick = () => startGame();
+  $('btnResultMenu').onclick = () => showScreen('menu');
 
-// — Game logic & rendering —
+  const canvas = $('canvasGame');
+  const ctx = canvas.getContext('2d');
+  let groundY;
 
-const canvas = $('canvasGame');
-const ctx = canvas.getContext('2d');
-
-// Resize
-function resizeCanvas() {
-  canvas.width = Math.floor(window.innerWidth * 0.9);
-  canvas.height = Math.floor(window.innerHeight * 0.4);
-  groundY = canvas.height - 50;
-}
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
-
-// Physics & config
-const gravity = 1.3;
-const jumpV = -18;
-let speed = 6;
-
-let dino, obstacles, score, running, paused, groundY;
-
-function resetGame() {
-  speed = 6;
-  dino = { x:50, y:0, w:40, h:40, vy:0, jumping:false };
-  dino.y = groundY - dino.h;
-  obstacles = [];
-  score = 0;
-  running = true;
-  paused = false;
-  $('scoreDisplay').innerText = '0';
-  $('bestDisplay').innerText = bestScore.toString();
-}
-
-function spawnObstacle() {
-  // spacing rule: last obstacle must be far enough
-  if (obstacles.length > 0) {
-    let last = obstacles[obstacles.length - 1];
-    if (last.x > canvas.width - 200) {
-      return;
-    }
+  function resizeCanvas() {
+    canvas.width = Math.floor(window.innerWidth * 0.9);
+    canvas.height = Math.floor(window.innerHeight * 0.4);
+    groundY = canvas.height - 50;
   }
-  let h = Math.random() > 0.5 ? 30 : 60;
-  let w = 20 + Math.random() * 15;
-  obstacles.push({ x: canvas.width, y: groundY - h, w: w, h: h });
-}
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
 
-function gameLoop() {
-  if (!running) return;
-  if (!paused) {
-    update();
-    draw();
-  }
-  requestAnimationFrame(gameLoop);
-}
+  const gravity = 1.3;
+  const jumpV = -18;
+  let speed;
 
-function update() {
-  dino.y += dino.vy;
-  dino.vy += gravity;
-  if (dino.y >= groundY - dino.h) {
+  let dino, obstacles, score, running, paused;
+
+  function resetGame() {
+    speed = 6;
+    dino = { x:50, y:0, w:40, h:40, vy:0, jumping:false };
     dino.y = groundY - dino.h;
-    dino.vy = 0;
-    dino.jumping = false;
+    obstacles = [];
+    score = 0;
+    running = true;
+    paused = false;
+    $('scoreDisplay').innerText = '0';
+    $('bestDisplay').innerText = best.toString();
   }
-  for (let o of obstacles) {
-    o.x -= speed;
-  }
-  obstacles = obstacles.filter(o => o.x + o.w > 0);
-  if (Math.random() < 0.02) spawnObstacle();
 
-  for (let o of obstacles) {
-    if (dino.x < o.x + o.w && dino.x + dino.w > o.x &&
-        dino.y < o.y + o.h && dino.y + dino.h > o.y) {
-      endGame();
-      break;
+  function spawnObstacle() {
+    if (obstacles.length > 0) {
+      let last = obstacles[obstacles.length - 1];
+      if (last.x > canvas.width - 200) return;
+    }
+    let h = Math.random() > 0.5 ? 30 : 60;
+    let w = 20 + Math.random()*15;
+    obstacles.push({ x: canvas.width, y: groundY - h, w: w, h: h });
+  }
+
+  function gameLoop() {
+    if (!running) return;
+    if (!paused) {
+      update();
+      draw();
+    }
+    requestAnimationFrame(gameLoop);
+  }
+
+  function update() {
+    dino.y += dino.vy;
+    dino.vy += gravity;
+    if (dino.y >= groundY - dino.h) {
+      dino.y = groundY - dino.h;
+      dino.vy = 0;
+      dino.jumping = false;
+    }
+    for (let o of obstacles) {
+      o.x -= speed;
+    }
+    obstacles = obstacles.filter(o => o.x + o.w > 0);
+    if (Math.random() < 0.02) spawnObstacle();
+
+    for (let o of obstacles) {
+      if (dino.x < o.x + o.w && dino.x + dino.w > o.x &&
+          dino.y < o.y + o.h && dino.y + dino.h > o.y) {
+        endGame();
+        break;
+      }
+    }
+
+    score++;
+    if (score > best) {
+      best = score;
+      localStorage.setItem('zenrex_best', best.toString());
+    }
+    $('scoreDisplay').innerText = score.toString();
+    $('bestDisplay').innerText = best.toString();
+  }
+
+  function draw() {
+    ctx.clearRect(0,0,canvas.width, canvas.height);
+    ctx.fillStyle = '#888';
+    ctx.fillRect(0, groundY, canvas.width, 4);
+    ctx.fillStyle = '#333';
+    ctx.fillRect(dino.x, dino.y, dino.w, dino.h);
+    ctx.fillStyle = '#4a896d';
+    obstacles.forEach(o => ctx.fillRect(o.x, o.y, o.w, o.h));
+  }
+
+  function jump() {
+    if (!dino.jumping) {
+      dino.vy = jumpV;
+      dino.jumping = true;
+      if (navigator.vibrate) navigator.vibrate(30);
     }
   }
 
-  score++;
-  if (score > bestScore) {
-    bestScore = score;
-    localStorage.setItem('zenrex_best', bestScore.toString());
+  window.addEventListener('keydown', e => {
+    if (e.code === 'Space' || e.code === 'ArrowUp') {
+      jump();
+    }
+  });
+  $('btnJump').onclick = () => jump();
+
+  function pauseGame() {
+    if (!running) return;
+    paused = true;
+    showScreen('pause');
   }
-  $('scoreDisplay').innerText = score.toString();
-  $('bestDisplay').innerText = bestScore.toString();
-}
-
-function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  // ground
-  ctx.fillStyle = '#999';
-  ctx.fillRect(0, groundY, canvas.width, 4);
-  // dino
-  ctx.fillStyle = '#333';
-  ctx.fillRect(dino.x, dino.y, dino.w, dino.h);
-  // obstacles
-  ctx.fillStyle = '#4a896d';
-  for (let o of obstacles) {
-    ctx.fillRect(o.x, o.y, o.w, o.h);
+  function resumeGame() {
+    paused = false;
+    showScreen('game');
+    gameLoop();
   }
-}
-
-function jump() {
-  if (!dino.jumping) {
-    dino.vy = jumpV;
-    dino.jumping = true;
-    if (navigator.vibrate) navigator.vibrate(30);
+  function stopGame() {
+    running = false;
   }
-}
-
-window.addEventListener('keydown', (e) => {
-  if (e.code === 'Space' || e.code === 'ArrowUp') {
-    jump();
-  } else if (e.code === 'KeyP') {
-    pauseGame();
+  function endGame() {
+    running = false;
+    $('finalScore').innerText = score;
+    showScreen('result');
   }
-});
-
-$('btnJump').onclick = () => { jump(); };
-
-function pauseGame() {
-  if (!running) return;
-  paused = true;
-  showScreen('pause');
-}
-
-function resumeGame() {
-  paused = false;
-  showScreen('game');
-  gameLoop();
-}
-
-function stopGame() {
-  running = false;
-}
-
-function endGame() {
-  running = false;
-  $('finalScore').innerText = score.toString();
-  showScreen('result');
-}
-
-function startGame() {
-  resetGame();
-  showScreen('game');
-  gameLoop();
-}
+  function startGame() {
+    resetGame();
+    showScreen('game');
+    gameLoop();
+  }
 
 </script>
-
 </body>
 </html>
