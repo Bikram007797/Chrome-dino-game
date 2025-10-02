@@ -17,20 +17,24 @@
       height: 100vh;
       overflow: hidden;
       transition: background 0.5s;
+      position: relative; /* 👈 add this */
     }
     h1 {
       font-size: 2rem;
       margin: 20px 0;
       color: #333;
     }
-    .screen {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      width: 100%;
-      text-align: center;
+   .screen {
+  display: none;
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #fefefe;
+
     }
     .active { display: flex; }
 
