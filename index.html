@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ZenRex Runner 🦖✨</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #fefefe;
+      font-family: "Trebuchet MS", sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      overflow: hidden;
+      transition: background 0.5s;
+    }
+    h1 {
+      font-size: 2rem;
+      margin: 20px 0;
+      color: #333;
+    }
+    .screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: 100%;
+      text-align: center;
+    }
+    .active { display: flex; }
+
+    button {
+      padding: 12px 24px;
+      margin: 10px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #a3d9c9, #69b7a5);
+      color: #fff;
+      font-weight: bold;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+      transition: transform 0.2s, background 0.2s;
+    }
+    button:active {
+      transform: scale(0.95);
+      background: linear-gradient(135deg, #69b7a5, #3a6b5b);
+    }
+
+    canvas {
+      background: #fff;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      margin: 10px 0;
+      touch-action: none;
+    }
+
+    #topBar {
+      display: flex;
+      justify-content: space-between;
+      width: 95%;
+      margin: 5px auto;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    .hidden { display: none; }
+
+    /* Loading animation */
+    .loader {
+      border: 6px solid #eee;
+      border-top: 6px solid #69b7a5;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin: 20px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOADING SCREEN -->
+  <div id="loadingScreen" class="screen active">
+    <div class="loader"></div>
+    <h1>ZenRex Runner 🦖✨</h1>
+    <p class="subtitle">Loading peaceful vibes… 🌿</p>
+  </div>
+
+  <!-- TITLE SCREEN -->
+  <div id="titleScreen" class="screen">
+    <h1>ZenRex Runner 🦖✨</h1>
+    <p class="subtitle">“Run free, stay calm, be zen.” 🌸</p>
+    <p>Developed by Bikram</p>
+    <button onclick="goToScreen('menuScreen')">Enter</button>
+  </div>
+
+  <!-- MAIN MENU -->
+  <div id="menuScreen" class="screen">
+    <h1>ZenRex Runner</h1>
+    <button onclick="startGame()">Start Game 🎮</button>
+    <button onclick="goToScreen('statsScreen')">Statistics 📊</button>
+    <button onclick="goToScreen('aboutScreen')">About ℹ️</button>
+  </div>
+
+  <!-- STATS -->
+  <div id="statsScreen" class="screen">
+    <h1>Statistics</h1>
+    <p>Best Score: <span id="bestScore"></span></p>
+    <button onclick="goToScreen('menuScreen')">Back</button>
+  </div>
+
+  <!-- ABOUT -->
+  <div id="aboutScreen" class="screen">
+    <h1>About</h1>
+    <p>ZenRex Runner is a calm endless runner game inspired by Japanese Zen culture 🌿.</p>
+    <p>Developed by Bikram ✨</p>
+    <button onclick="goToScreen('menuScreen')">Back</button>
+  </div>
+
+  <!-- GAME -->
+  <div id="gameScreen" class="screen">
+    <div id="topBar">
+      <span>Score: <span id="scoreDisplay">0</span></span>
+      <span>Best: <span id="bestDisplay">0</span></span>
+    </div>
+    <div id="topButtons">
+      <button onclick="pauseGame()">Pause ⏸️</button>
+      <button onclick="restartGame()">Restart 🔄</button>
+      <button onclick="goToScreen('menuScreen')">Main Menu 🏠</button>
+    </div>
+    <canvas id="gameCanvas"></canvas>
+    <button onclick="jump()" id="jumpBtn">Jump ⬆️</button>
+  </div>
+
+  <!-- PAUSE -->
+  <div id="pauseScreen" class="screen">
+    <h1>Game Paused</h1>
+    <button onclick="resumeGame()">Resume ▶️</button>
+  </div>
+
+  <!-- RESULT -->
+  <div id="resultScreen" class="screen">
+    <h1>Game Over 💀</h1>
+    <p>Your Score: <span id="finalScore"></span></p>
+    <button onclick="nextGame()">Next 🔁</button>
+  </div>
+
+<script>
+let state = "loading";
+let score = 0, best = localStorage.getItem("zenrexBest") || 0;
+let dino, ground, obstacles, gravity = 1.2, jumpPower = -18, speed = 6;
+let running = false, paused = false;
+
+const screens = {
+  loading: document.getElementById("loadingScreen"),
+  title: document.getElementById("titleScreen"),
+  menu: document.getElementById("menuScreen"),
+  stats: document.getElementById("statsScreen"),
+  about: document.getElementById("aboutScreen"),
+  game: document.getElementById("gameScreen"),
+  pause: document.getElementById("pauseScreen"),
+  result: document.getElementById("resultScreen"),
+};
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+resizeCanvas(); window.addEventListener("resize", resizeCanvas);
+
+function resizeCanvas(){ canvas.width = window.innerWidth*0.9; canvas.height = window.innerHeight*0.4; ground = canvas.height-50; }
+function goToScreen(name){
+  Object.values(screens).forEach(s=>s.classList.remove("active"));
+  screens[name].classList.add("active"); state = name;
+  if(name==="stats"){ document.getElementById("bestScore").innerText = best; }
+}
+function startGame(){ resetGame(); goToScreen("game"); running = true; gameLoop(); }
+function resetGame(){ dino={x:50,y:0,w:40,h:40,vy:0,jumping:false}; dino.y=ground-dino.h; obstacles=[]; score=0; speed=6; paused=false; }
+function spawnObstacle(){
+  if(obstacles.length && obstacles[obstacles.length-1].x > canvas.width-200) return; // spacing
+  let h = Math.random()>0.5?30:60;
+  obstacles.push({x:canvas.width,y:ground-h,w:20+Math.random()*20,h});
+}
+function update(){
+  if(paused) return;
+  dino.y += dino.vy; dino.vy+=gravity;
+  if(dino.y>=ground-dino.h){ dino.y=ground-dino.h; dino.vy=0; dino.jumping=false; }
+  obstacles.forEach(o=>o.x-=speed);
+  obstacles = obstacles.filter(o=>o.x+o.w>0);
+  if(Math.random()<0.02) spawnObstacle();
+  for(let o of obstacles){
+    if(dino.x<o.x+o.w && dino.x+dino.w>o.x && dino.y<o.y+o.h && dino.y+dino.h>o.y){ endGame(); }
+  }
+  score++; if(score>best){ best=score; localStorage.setItem("zenrexBest",best); }
+}
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle="#aaa"; ctx.fillRect(0,ground,canvas.width,3);
+  ctx.fillStyle="#333"; ctx.fillRect(dino.x,dino.y,dino.w,dino.h);
+  ctx.fillStyle="#4caf50"; obstacles.forEach(o=>ctx.fillRect(o.x,o.y,o.w,o.h));
+  document.getElementById("scoreDisplay").innerText = score;
+  document.getElementById("bestDisplay").innerText = best;
+}
+function gameLoop(){ if(!running) return; update(); draw(); requestAnimationFrame(gameLoop); }
+function jump(){ if(!dino.jumping){ dino.vy=jumpPower; dino.jumping=true; navigator.vibrate?.(50); } }
+function pauseGame(){ paused=true; goToScreen("pause"); }
+function resumeGame(){ paused=false; goToScreen("game"); gameLoop(); }
+function restartGame(){ startGame(); }
+function endGame(){ running=false; document.getElementById("finalScore").innerText=score; goToScreen("result"); }
+function nextGame(){ startGame(); }
+
+document.addEventListener("keydown",e=>{ if(e.code==="Space"||e.code==="ArrowUp") jump(); });
+document.getElementById("jumpBtn").addEventListener("click",jump);
+
+// auto transition loading→title
+setTimeout(()=>goToScreen("title"),3000);
+</script>
+</body>
+</html>
