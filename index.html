@@ -17,24 +17,20 @@
       height: 100vh;
       overflow: hidden;
       transition: background 0.5s;
-      position: relative; /* 👈 add this */
     }
     h1 {
       font-size: 2rem;
       margin: 20px 0;
       color: #333;
     }
-   .screen {
-  display: none;
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: #fefefe;
-
+    .screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: 100%;
+      text-align: center;
     }
     .active { display: flex; }
 
@@ -164,10 +160,20 @@
   </div>
 
 <script>
+// Game variables
 let state = "loading";
-let score = 0, best = localStorage.getItem("zenrexBest") || 0;
-let dino, ground, obstacles, gravity = 1.2, jumpPower = -18, speed = 6;
-let running = false, paused = false;
+let score = 0;
+let best = parseInt(localStorage.getItem("zenrexBest")) || 0;
+let dino, ground, obstacles;
+let gravity = 1.2;
+let jumpPower = -18;
+let speed = 6;
+let running = false;
+let paused = false;
+let lastFrameTime = 0;
+
+// Initialize high score display
+document.getElementById("bestDisplay").innerText = best;
 
 const screens = {
   loading: document.getElementById("loadingScreen"),
@@ -184,29 +190,104 @@ const ctx = canvas.getContext("2d");
 resizeCanvas(); window.addEventListener("resize", resizeCanvas);
 
 function resizeCanvas(){ canvas.width = window.innerWidth*0.9; canvas.height = window.innerHeight*0.4; ground = canvas.height-50; }
-function goToScreen(name){
-  Object.values(screens).forEach(s=>s.classList.remove("active"));
-  screens[name].classList.add("active"); state = name;
-  if(name==="stats"){ document.getElementById("bestScore").innerText = best; }
+function goToScreen(name) {
+    // Make sure we have a valid screen name
+    if (!screens[name]) {
+        console.error('Invalid screen name:', name);
+        return;
+    }
+    
+    // Deactivate all screens first
+    Object.values(screens).forEach(s => s.classList.remove("active"));
+    
+    // Activate the requested screen
+    screens[name].classList.add("active");
+    state = name;
+    
+    // Special screen initializations
+    if (name === "stats") {
+        document.getElementById("bestScore").innerText = best;
+    } else if (name === "game") {
+        resetGame();
+        running = true;
+        requestAnimationFrame(gameLoop);
+    }
 }
-function startGame(){ resetGame(); goToScreen("game"); running = true; gameLoop(); }
-function resetGame(){ dino={x:50,y:0,w:40,h:40,vy:0,jumping:false}; dino.y=ground-dino.h; obstacles=[]; score=0; speed=6; paused=false; }
+
+function startGame() {
+    resetGame();
+    goToScreen("game");
+}
+
+function resetGame() {
+    // Initialize dino position and properties
+    dino = {
+        x: 50,
+        y: ground - 40, // Start at ground level
+        w: 40,
+        h: 40,
+        vy: 0,
+        jumping: false
+    };
+    
+    // Reset game state
+    obstacles = [];
+    score = 0;
+    speed = 6;
+    paused = false;
+    running = true;
+    
+    // Update displays
+    document.getElementById("scoreDisplay").innerText = "0";
+    document.getElementById("bestDisplay").innerText = best;
+}
 function spawnObstacle(){
   if(obstacles.length && obstacles[obstacles.length-1].x > canvas.width-200) return; // spacing
   let h = Math.random()>0.5?30:60;
   obstacles.push({x:canvas.width,y:ground-h,w:20+Math.random()*20,h});
 }
-function update(){
-  if(paused) return;
-  dino.y += dino.vy; dino.vy+=gravity;
-  if(dino.y>=ground-dino.h){ dino.y=ground-dino.h; dino.vy=0; dino.jumping=false; }
-  obstacles.forEach(o=>o.x-=speed);
-  obstacles = obstacles.filter(o=>o.x+o.w>0);
-  if(Math.random()<0.02) spawnObstacle();
-  for(let o of obstacles){
-    if(dino.x<o.x+o.w && dino.x+dino.w>o.x && dino.y<o.y+o.h && dino.y+dino.h>o.y){ endGame(); }
-  }
-  score++; if(score>best){ best=score; localStorage.setItem("zenrexBest",best); }
+function update(deltaTime = 1) {
+    if (!running || paused) return;
+    
+    // Update dino position
+    dino.y += dino.vy * deltaTime;
+    dino.vy += gravity * deltaTime;
+    
+    // Ground collision
+    if (dino.y >= ground - dino.h) {
+        dino.y = ground - dino.h;
+        dino.vy = 0;
+        dino.jumping = false;
+    }
+    
+    // Update obstacles
+    obstacles.forEach(o => o.x -= speed * deltaTime);
+    obstacles = obstacles.filter(o => o.x + o.w > 0);
+    
+    // Spawn new obstacles
+    if (Math.random() < 0.02 * deltaTime) {
+        spawnObstacle();
+    }
+    
+    // Collision detection
+    for (let o of obstacles) {
+        if (dino.x < o.x + o.w && 
+            dino.x + dino.w > o.x && 
+            dino.y < o.y + o.h && 
+            dino.y + dino.h > o.y) {
+            endGame();
+            return;
+        }
+    }
+    
+    // Update score
+    score += Math.round(deltaTime);
+    document.getElementById("scoreDisplay").innerText = score;
+    if (score > best) {
+        best = score;
+        document.getElementById("bestDisplay").innerText = best;
+        localStorage.setItem("zenrexBest", best);
+    }
 }
 function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -216,13 +297,68 @@ function draw(){
   document.getElementById("scoreDisplay").innerText = score;
   document.getElementById("bestDisplay").innerText = best;
 }
-function gameLoop(){ if(!running) return; update(); draw(); requestAnimationFrame(gameLoop); }
-function jump(){ if(!dino.jumping){ dino.vy=jumpPower; dino.jumping=true; navigator.vibrate?.(50); } }
-function pauseGame(){ paused=true; goToScreen("pause"); }
-function resumeGame(){ paused=false; goToScreen("game"); gameLoop(); }
-function restartGame(){ startGame(); }
-function endGame(){ running=false; document.getElementById("finalScore").innerText=score; goToScreen("result"); }
-function nextGame(){ startGame(); }
+function gameLoop(timestamp) {
+    if (!running || paused) return;
+    
+    // Calculate delta time for smooth animation
+    if (!lastFrameTime) lastFrameTime = timestamp;
+    const deltaTime = (timestamp - lastFrameTime) / 16.67; // normalize to ~60fps
+    lastFrameTime = timestamp;
+    
+    update(deltaTime);
+    draw();
+    
+    if (running) {
+        requestAnimationFrame(gameLoop);
+    }
+}
+
+function jump() {
+    if (!dino.jumping && running && !paused) {
+        dino.vy = jumpPower;
+        dino.jumping = true;
+        if (navigator.vibrate) {
+            navigator.vibrate(50);
+        }
+    }
+}
+
+function pauseGame() {
+    if (running) {
+        paused = true;
+        goToScreen("pause");
+    }
+}
+
+function resumeGame() {
+    if (running) {
+        paused = false;
+        goToScreen("game");
+        lastFrameTime = 0;
+        requestAnimationFrame(gameLoop);
+    }
+}
+
+function restartGame() {
+    resetGame();
+    goToScreen("game");
+}
+
+function endGame() {
+    running = false;
+    document.getElementById("finalScore").innerText = score;
+    // Update best score
+    if (score > best) {
+        best = score;
+        localStorage.setItem("zenrexBest", best);
+        document.getElementById("bestDisplay").innerText = best;
+    }
+    goToScreen("result");
+}
+
+function nextGame() {
+    startGame();
+}
 
 document.addEventListener("keydown",e=>{ if(e.code==="Space"||e.code==="ArrowUp") jump(); });
 document.getElementById("jumpBtn").addEventListener("click",jump);
