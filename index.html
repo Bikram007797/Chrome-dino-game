@@ -281,6 +281,8 @@
             align-items: center;
             z-index: 10001;
             padding: 20px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .modal.active {
@@ -295,8 +297,28 @@
             width: 100%;
             max-height: 80vh;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
             animation: scaleIn 0.3s ease;
+            position: relative;
+        }
+
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: #a8727d;
+            border-radius: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: #8b5a65;
         }
 
         @keyframes scaleIn {
@@ -722,6 +744,39 @@
         @media (max-width: 480px) {
             .avatar-grid {
                 grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .modal {
+                padding: 10px;
+                align-items: flex-start;
+                padding-top: 20px;
+            }
+            
+            .modal-content {
+                max-height: 85vh;
+                padding: 25px 20px;
+                margin: auto 0;
+            }
+            
+            .modal-title {
+                position: sticky;
+                top: -25px;
+                background: white;
+                padding: 15px 0 10px 0;
+                margin: -25px -20px 15px -20px;
+                padding-left: 20px;
+                padding-right: 20px;
+                z-index: 10;
+                border-bottom: 2px solid #ffecd2;
+            }
+            
+            .modal-close {
+                position: sticky;
+                bottom: -25px;
+                background: linear-gradient(135deg, #d4a5a5, #a8727d);
+                margin: 20px -20px -25px -20px;
+                border-radius: 0 0 20px 20px;
+                padding: 15px 30px;
             }
         }
     </style>
@@ -1954,27 +2009,33 @@
                 document.getElementById('profileTotalCoins').textContent = GameState.totalCoins;
                 document.getElementById('profileMaxLevel').textContent = GameState.maxLevel;
                 document.getElementById('profileModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
             });
             
             document.getElementById('howToPlayBtn').addEventListener('click', () => {
                 document.getElementById('howToPlayModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
             });
             
             document.getElementById('aboutBtn').addEventListener('click', () => {
                 document.getElementById('aboutModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
             });
             
             // Close modals
             document.getElementById('closeProfileBtn').addEventListener('click', () => {
                 document.getElementById('profileModal').classList.remove('active');
+                document.body.style.overflow = '';
             });
             
             document.getElementById('closeHowToPlayBtn').addEventListener('click', () => {
                 document.getElementById('howToPlayModal').classList.remove('active');
+                document.body.style.overflow = '';
             });
             
             document.getElementById('closeAboutBtn').addEventListener('click', () => {
                 document.getElementById('aboutModal').classList.remove('active');
+                document.body.style.overflow = '';
             });
             
             // Game controls
