@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#d4a5a5">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>和 ZenFlow Runner</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,14 +16,21 @@
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: fixed;
         }
 
         body {
             font-family: 'Zen Maru Gothic', sans-serif;
             background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-            min-height: 100vh;
-            overflow: hidden;
-            position: relative;
             touch-action: none;
         }
 
@@ -81,11 +89,13 @@
 
         .loading-title {
             font-family: 'Noto Serif JP', serif;
-            font-size: 3em;
+            font-size: clamp(2em, 8vw, 3em);
             color: white;
             text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
             margin-bottom: 30px;
             animation: pulse 2s ease-in-out infinite;
+            text-align: center;
+            padding: 0 20px;
         }
 
         @keyframes pulse {
@@ -127,6 +137,7 @@
             align-items: center;
             z-index: 9999;
             transition: opacity 0.5s ease;
+            padding: 20px;
         }
 
         .title-screen.active {
@@ -135,11 +146,12 @@
 
         .title-logo {
             font-family: 'Noto Serif JP', serif;
-            font-size: 4em;
+            font-size: clamp(2.5em, 10vw, 4em);
             color: white;
             text-shadow: 4px 4px 15px rgba(0, 0, 0, 0.4);
             margin-bottom: 50px;
             animation: fadeInDown 1s ease;
+            text-align: center;
         }
 
         @keyframes fadeInDown {
@@ -154,7 +166,7 @@
         }
 
         .title-subtitle {
-            font-size: 1.3em;
+            font-size: clamp(1.1em, 4vw, 1.3em);
             color: rgba(255, 255, 255, 0.9);
             margin-bottom: 60px;
             animation: fadeIn 1.5s ease;
@@ -171,7 +183,7 @@
             color: #a8727d;
             border: none;
             padding: 20px 60px;
-            font-size: 1.5em;
+            font-size: clamp(1.2em, 5vw, 1.5em);
             font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
@@ -217,10 +229,11 @@
 
         .menu-title {
             font-family: 'Noto Serif JP', serif;
-            font-size: 3em;
+            font-size: clamp(2em, 8vw, 3em);
             color: #a8727d;
             text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
             margin-bottom: 50px;
+            text-align: center;
         }
 
         .menu-buttons {
@@ -237,7 +250,7 @@
             color: white;
             border: none;
             padding: 18px 40px;
-            font-size: 1.3em;
+            font-size: clamp(1.1em, 4.5vw, 1.3em);
             font-weight: bold;
             border-radius: 15px;
             cursor: pointer;
@@ -247,6 +260,7 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            min-height: 60px;
         }
 
         .menu-btn:active {
@@ -298,14 +312,14 @@
 
         .modal-title {
             font-family: 'Noto Serif JP', serif;
-            font-size: 2em;
+            font-size: clamp(1.5em, 6vw, 2em);
             color: #a8727d;
             margin-bottom: 20px;
             text-align: center;
         }
 
         .modal-text {
-            font-size: 1.1em;
+            font-size: clamp(1em, 4vw, 1.1em);
             line-height: 1.8;
             color: #333;
             margin-bottom: 15px;
@@ -316,12 +330,13 @@
             color: white;
             border: none;
             padding: 12px 30px;
-            font-size: 1.1em;
+            font-size: clamp(1em, 4vw, 1.1em);
             font-weight: bold;
             border-radius: 10px;
             cursor: pointer;
             width: 100%;
             margin-top: 20px;
+            min-height: 50px;
         }
 
         .stats-grid {
@@ -339,18 +354,18 @@
         }
 
         .stat-label {
-            font-size: 0.9em;
+            font-size: clamp(0.8em, 3.5vw, 0.9em);
             color: #666;
             margin-bottom: 5px;
         }
 
         .stat-value {
-            font-size: 1.8em;
+            font-size: clamp(1.4em, 6vw, 1.8em);
             font-weight: bold;
             color: #a8727d;
         }
 
-        /* Game Screen */
+        /* Game Screen - FULL SCREEN MOBILE */
         .game-screen {
             position: fixed;
             top: 0;
@@ -359,10 +374,8 @@
             height: 100%;
             display: none;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
             z-index: 9997;
-            padding: 10px;
+            background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 50%, #90EE90 100%);
         }
 
         .game-screen.active {
@@ -371,46 +384,49 @@
 
         .game-header {
             width: 100%;
-            max-width: 900px;
             display: flex;
-            justify-content: space-between;
-            padding: 15px 20px;
+            justify-content: space-around;
+            padding: 10px;
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px 15px 0 0;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
         }
 
         .game-stat {
             text-align: center;
+            flex: 1;
         }
 
         .game-stat-label {
-            font-size: 0.85em;
+            font-size: clamp(0.7em, 3vw, 0.85em);
             color: #666;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
 
         .game-stat-value {
-            font-size: 1.5em;
+            font-size: clamp(1.2em, 5vw, 1.5em);
             font-weight: bold;
             color: #a8727d;
         }
 
         #gameCanvas {
-            border: none;
-            border-radius: 0 0 15px 15px;
+            width: 100% !important;
+            height: auto !important;
+            flex: 1;
             display: block;
-            background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 50%, #90EE90 100%);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
             touch-action: none;
+            object-fit: contain;
         }
 
         .game-controls {
-            margin-top: 15px;
+            padding: 10px;
             display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
+            gap: 10px;
             justify-content: center;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+            flex-wrap: wrap;
         }
 
         .game-btn {
@@ -418,13 +434,16 @@
             background: linear-gradient(135deg, #d4a5a5, #a8727d);
             color: white;
             border: none;
-            padding: 12px 25px;
-            font-size: 1.1em;
+            padding: 12px 20px;
+            font-size: clamp(0.9em, 3.5vw, 1.1em);
             font-weight: bold;
             border-radius: 10px;
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            min-height: 45px;
+            flex: 1;
+            min-width: 80px;
         }
 
         .game-btn:active {
@@ -454,7 +473,8 @@
             background: white;
             border-radius: 20px;
             padding: 30px;
-            max-width: 500px;
+            max-width: 400px;
+            width: 100%;
             text-align: center;
             animation: scaleIn 0.3s ease;
         }
@@ -465,7 +485,7 @@
         }
 
         .tutorial-text {
-            font-size: 1.3em;
+            font-size: clamp(1.1em, 4.5vw, 1.3em);
             color: #333;
             margin-bottom: 20px;
             line-height: 1.6;
@@ -476,10 +496,12 @@
             color: white;
             border: none;
             padding: 15px 40px;
-            font-size: 1.2em;
+            font-size: clamp(1em, 4vw, 1.2em);
             font-weight: bold;
             border-radius: 10px;
             cursor: pointer;
+            min-height: 50px;
+            width: 100%;
         }
 
         /* Achievement Toast */
@@ -490,15 +512,16 @@
             transform: translateX(-50%);
             background: linear-gradient(135deg, #ffd700, #ffed4e);
             color: #333;
-            padding: 20px 30px;
+            padding: 15px 25px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             z-index: 10003;
             font-weight: bold;
-            font-size: 1.2em;
+            font-size: clamp(1em, 4vw, 1.2em);
             transition: top 0.5s ease;
             text-align: center;
             min-width: 250px;
+            max-width: 90%;
         }
 
         .achievement-toast.show {
@@ -508,11 +531,11 @@
         /* Power-up Display */
         .powerup-display {
             position: fixed;
-            bottom: 20px;
+            bottom: 80px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(255, 255, 255, 0.95);
-            padding: 15px 25px;
+            padding: 12px 20px;
             border-radius: 15px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
             display: none;
@@ -531,7 +554,7 @@
         }
 
         .powerup-timer {
-            font-size: 1.3em;
+            font-size: clamp(1.1em, 4vw, 1.3em);
             color: #a8727d;
         }
 
@@ -543,7 +566,7 @@
             transform: translate(-50%, -50%) scale(0);
             background: white;
             border-radius: 20px;
-            padding: 40px;
+            padding: 30px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
             z-index: 10004;
             text-align: center;
@@ -558,14 +581,14 @@
 
         .gameover-title {
             font-family: 'Noto Serif JP', serif;
-            font-size: 2.5em;
+            font-size: clamp(2em, 8vw, 2.5em);
             color: #a8727d;
             margin-bottom: 20px;
         }
 
         .gameover-stats {
             margin: 20px 0;
-            font-size: 1.2em;
+            font-size: clamp(1em, 4vw, 1.2em);
             line-height: 2;
         }
 
@@ -573,6 +596,7 @@
             display: flex;
             gap: 15px;
             margin-top: 30px;
+            flex-wrap: wrap;
         }
 
         .gameover-btn {
@@ -582,24 +606,12 @@
             color: white;
             border: none;
             padding: 15px 20px;
-            font-size: 1.1em;
+            font-size: clamp(1em, 4vw, 1.1em);
             font-weight: bold;
             border-radius: 10px;
             cursor: pointer;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .loading-title, .title-logo { font-size: 2.5em; }
-            .menu-title { font-size: 2.2em; }
-            .game-stat-value { font-size: 1.2em; }
-            #gameCanvas { width: 100% !important; height: auto !important; }
-        }
-
-        @media (max-width: 480px) {
-            .loading-title, .title-logo { font-size: 2em; }
-            .menu-title { font-size: 1.8em; }
-            .menu-btn { font-size: 1.1em; padding: 15px 30px; }
+            min-height: 50px;
+            min-width: 120px;
         }
 
         /* Name Input */
@@ -624,15 +636,17 @@
         .name-input-box {
             background: white;
             border-radius: 20px;
-            padding: 40px;
+            padding: 30px;
             text-align: center;
-            max-width: 400px;
+            max-width: 450px;
             width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .name-input-title {
             font-family: 'Noto Serif JP', serif;
-            font-size: 2em;
+            font-size: clamp(1.5em, 6vw, 2em);
             color: #a8727d;
             margin-bottom: 20px;
         }
@@ -640,12 +654,50 @@
         .name-input-field {
             width: 100%;
             padding: 15px;
-            font-size: 1.2em;
+            font-size: clamp(1em, 4vw, 1.2em);
             border: 2px solid #d4a5a5;
             border-radius: 10px;
             margin-bottom: 20px;
             font-family: 'Zen Maru Gothic', sans-serif;
             text-align: center;
+        }
+
+        .avatar-section {
+            margin: 25px 0;
+        }
+
+        .avatar-label {
+            font-size: clamp(1em, 4vw, 1.2em);
+            color: #666;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .avatar-option {
+            font-size: clamp(2.5em, 10vw, 3.5em);
+            padding: 10px;
+            border: 3px solid transparent;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .avatar-option:active {
+            transform: scale(0.9);
+        }
+
+        .avatar-option.selected {
+            border-color: #a8727d;
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            box-shadow: 0 5px 15px rgba(168, 114, 125, 0.3);
         }
 
         .name-input-btn {
@@ -654,11 +706,23 @@
             color: white;
             border: none;
             padding: 15px;
-            font-size: 1.2em;
+            font-size: clamp(1em, 4vw, 1.2em);
             font-weight: bold;
             border-radius: 10px;
             cursor: pointer;
             font-family: 'Zen Maru Gothic', sans-serif;
+            min-height: 55px;
+        }
+
+        .profile-avatar {
+            font-size: 5em;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 480px) {
+            .avatar-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
     </style>
 </head>
@@ -684,9 +748,28 @@
     <div class="name-input-modal" id="nameInputModal">
         <div class="name-input-box">
             <div class="name-input-title">Welcome, Runner!</div>
-            <p style="margin-bottom: 20px; color: #666;">Please enter your name</p>
-            <input type="text" class="name-input-field" id="playerNameInput" placeholder="Your Name" maxlength="15">
-            <button class="name-input-btn" id="saveNameBtn">Continue</button>
+            <p style="margin-bottom: 20px; color: #666; font-size: clamp(0.9em, 3.5vw, 1em);">Create your profile</p>
+            <input type="text" class="name-input-field" id="playerNameInput" placeholder="Enter your name" maxlength="15">
+            
+            <div class="avatar-section">
+                <div class="avatar-label">Choose your avatar</div>
+                <div class="avatar-grid" id="avatarGrid">
+                    <div class="avatar-option" data-avatar="🦊">🦊</div>
+                    <div class="avatar-option" data-avatar="🐼">🐼</div>
+                    <div class="avatar-option" data-avatar="🐯">🐯</div>
+                    <div class="avatar-option" data-avatar="🐨">🐨</div>
+                    <div class="avatar-option" data-avatar="🦁">🦁</div>
+                    <div class="avatar-option" data-avatar="🐺">🐺</div>
+                    <div class="avatar-option" data-avatar="🐱">🐱</div>
+                    <div class="avatar-option" data-avatar="🐰">🐰</div>
+                    <div class="avatar-option" data-avatar="🐻">🐻</div>
+                    <div class="avatar-option" data-avatar="🦄">🦄</div>
+                    <div class="avatar-option" data-avatar="🐉">🐉</div>
+                    <div class="avatar-option" data-avatar="🦅">🦅</div>
+                </div>
+            </div>
+            
+            <button class="name-input-btn" id="saveNameBtn">Start Adventure</button>
         </div>
     </div>
 
@@ -706,8 +789,8 @@
         <div class="modal-content">
             <div class="modal-title">Player Profile</div>
             <div style="text-align: center; margin-bottom: 20px;">
-                <div style="font-size: 3em;">🦊</div>
-                <div style="font-size: 1.5em; color: #a8727d; font-weight: bold; margin-top: 10px;" id="profileName">Guest</div>
+                <div class="profile-avatar" id="profileAvatar">🦊</div>
+                <div style="font-size: clamp(1.2em, 5vw, 1.5em); color: #a8727d; font-weight: bold; margin-top: 10px;" id="profileName">Guest</div>
             </div>
             <div class="stats-grid">
                 <div class="stat-card">
@@ -742,12 +825,13 @@
             <div class="modal-text">
                 <strong>🎮 Controls:</strong><br>
                 • <strong>Tap/Space/Up Arrow:</strong> Jump<br>
-                • <strong>Down Arrow/Swipe Down:</strong> Duck<br>
+                • <strong>Swipe Up:</strong> Jump<br>
+                • <strong>Swipe Down:</strong> Duck<br>
                 • <strong>Double Tap:</strong> Double Jump (Unlock at Level 3!)
             </div>
             <div class="modal-text">
                 <strong>💎 Collectibles:</strong><br>
-                • <strong>Coins:</strong> Earn bonus points<br>
+                • <strong>Coins (¥):</strong> Earn bonus points<br>
                 • <strong>Power-ups:</strong> Special abilities to help you
             </div>
             <div class="modal-text">
@@ -812,7 +896,7 @@
                 <div class="game-stat-value" id="gameCoins">0</div>
             </div>
         </div>
-        <canvas id="gameCanvas" width="900" height="500"></canvas>
+        <canvas id="gameCanvas" width="900" height="600"></canvas>
         <div class="game-controls">
             <button class="game-btn" id="pauseBtn">⏸ Pause</button>
             <button class="game-btn" id="muteBtn">🔊 Sound</button>
@@ -824,7 +908,7 @@
     <div class="tutorial-overlay" id="tutorialOverlay">
         <div class="tutorial-box">
             <div class="tutorial-icon" id="tutorialIcon">👆</div>
-            <div class="tutorial-text" id="tutorialText">Tap or press Space to jump!</div>
+            <div class="tutorial-text" id="tutorialText">Swipe up or tap to jump!</div>
             <button class="tutorial-btn" id="tutorialNextBtn">Got it!</button>
         </div>
     </div>
@@ -861,8 +945,8 @@
             canvas: null,
             ctx: null,
             width: 900,
-            height: 500,
-            groundY: 400,
+            height: 600,
+            groundY: 500,
             gravity: 0.8,
             jumpPower: -16,
             baseSpeed: 7
@@ -875,8 +959,9 @@
             score: 0,
             level: 1,
             combo: 0,
-            coins: 0,
+            coinsThisGame: 0,
             playerName: localStorage.getItem('playerName') || 'Guest',
+            playerAvatar: localStorage.getItem('playerAvatar') || '🦊',
             bestScore: parseInt(localStorage.getItem('bestScore')) || 0,
             totalGamesPlayed: parseInt(localStorage.getItem('totalGamesPlayed')) || 0,
             totalCoins: parseInt(localStorage.getItem('totalCoins')) || 0,
@@ -923,68 +1008,88 @@
             backgroundOffset: 0
         };
 
-        // Touch controls
+        // Touch controls with improved sensitivity
         let touchStartY = 0;
         let touchStartX = 0;
+        let touchStartTime = 0;
+        let lastTouchEndTime = 0;
+        const SWIPE_THRESHOLD = 30; // Reduced for better sensitivity
+        const TAP_THRESHOLD = 200; // ms for tap detection
+        const DOUBLE_TAP_THRESHOLD = 300; // ms for double tap
+
+        // Selected avatar
+        let selectedAvatar = localStorage.getItem('playerAvatar') || '🦊';
 
         // ============= AUDIO SYSTEM =============
         const AudioSystem = {
             context: null,
             
             init() {
-                this.context = new (window.AudioContext || window.webkitAudioContext)();
+                try {
+                    this.context = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    console.log('Web Audio API not supported');
+                }
             },
 
             playSound(type) {
                 if (!GameState.soundEnabled || !this.context) return;
                 
-                const oscillator = this.context.createOscillator();
-                const gainNode = this.context.createGain();
-                oscillator.connect(gainNode);
-                gainNode.connect(this.context.destination);
+                try {
+                    const oscillator = this.context.createOscillator();
+                    const gainNode = this.context.createGain();
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.context.destination);
 
-                switch(type) {
-                    case 'jump':
-                        oscillator.frequency.value = 500;
-                        gainNode.gain.setValueAtTime(0.3, this.context.currentTime);
-                        gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.15);
-                        oscillator.start(this.context.currentTime);
-                        oscillator.stop(this.context.currentTime + 0.15);
-                        break;
-                    case 'coin':
-                        oscillator.frequency.value = 800;
-                        gainNode.gain.setValueAtTime(0.3, this.context.currentTime);
-                        gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.2);
-                        oscillator.start(this.context.currentTime);
-                        oscillator.stop(this.context.currentTime + 0.2);
-                        break;
-                    case 'powerup':
-                        oscillator.frequency.value = 1000;
-                        gainNode.gain.setValueAtTime(0.3, this.context.currentTime);
-                        gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.3);
-                        oscillator.start(this.context.currentTime);
-                        oscillator.stop(this.context.currentTime + 0.3);
-                        break;
-                    case 'achievement':
-                        oscillator.frequency.value = 700;
-                        gainNode.gain.setValueAtTime(0.3, this.context.currentTime);
-                        gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.4);
-                        oscillator.start(this.context.currentTime);
-                        oscillator.stop(this.context.currentTime + 0.4);
-                        break;
-                    case 'gameover':
-                        oscillator.frequency.value = 200;
-                        gainNode.gain.setValueAtTime(0.4, this.context.currentTime);
-                        gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.6);
-                        oscillator.start(this.context.currentTime);
-                        oscillator.stop(this.context.currentTime + 0.6);
-                        break;
+                    switch(type) {
+                        case 'jump':
+                            oscillator.frequency.value = 500;
+                            gainNode.gain.setValueAtTime(0.3, this.context.currentTime);
+                            gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.15);
+                            oscillator.start(this.context.currentTime);
+                            oscillator.stop(this.context.currentTime + 0.15);
+                            break;
+                        case 'coin':
+                            oscillator.frequency.value = 800;
+                            gainNode.gain.setValueAtTime(0.3, this.context.currentTime);
+                            gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.2);
+                            oscillator.start(this.context.currentTime);
+                            oscillator.stop(this.context.currentTime + 0.2);
+                            break;
+                        case 'powerup':
+                            oscillator.frequency.value = 1000;
+                            gainNode.gain.setValueAtTime(0.3, this.context.currentTime);
+                            gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.3);
+                            oscillator.start(this.context.currentTime);
+                            oscillator.stop(this.context.currentTime + 0.3);
+                            break;
+                        case 'achievement':
+                            oscillator.frequency.value = 700;
+                            gainNode.gain.setValueAtTime(0.3, this.context.currentTime);
+                            gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.4);
+                            oscillator.start(this.context.currentTime);
+                            oscillator.stop(this.context.currentTime + 0.4);
+                            break;
+                        case 'gameover':
+                            oscillator.frequency.value = 200;
+                            gainNode.gain.setValueAtTime(0.4, this.context.currentTime);
+                            gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.6);
+                            oscillator.start(this.context.currentTime);
+                            oscillator.stop(this.context.currentTime + 0.6);
+                            break;
+                    }
+                } catch (e) {
+                    console.log('Sound playback error');
                 }
             },
 
             vibrate(pattern) {
                 if (navigator.vibrate) {
-                    navigator.vibrate(pattern);
+                    try {
+                        navigator.vibrate(pattern);
+                    } catch (e) {
+                        console.log('Vibration not supported');
+                    }
                 }
             }
         };
@@ -1549,8 +1654,8 @@
             if (GameState.combo >= 10 && !GameState.achievements.includes('combo_master')) {
                 unlockAchievement('combo_master', 'Combo Master - 10x Combo!');
             }
-            if (GameState.coins >= 50 && !GameState.achievements.includes('rich_fox')) {
-                unlockAchievement('rich_fox', 'Rich Fox - Collected 50 coins!');
+            if (GameState.coinsThisGame >= 50 && !GameState.achievements.includes('rich_fox')) {
+                unlockAchievement('rich_fox', 'Rich Fox - Collected 50 coins in one game!');
             }
         }
 
@@ -1632,7 +1737,7 @@
                 if (distance < 30 && !coin.collected) {
                     coin.collected = true;
                     GameState.score += 50;
-                    GameState.coins++;
+                    GameState.coinsThisGame++;
                     createParticles(coin.x, coin.y, '#FFD700', 20);
                     AudioSystem.playSound('coin');
                     AudioSystem.vibrate(30);
@@ -1679,7 +1784,7 @@
             document.getElementById('gameScore').textContent = GameState.score;
             document.getElementById('gameLevel').textContent = GameState.level;
             document.getElementById('gameCombo').textContent = GameState.combo;
-            document.getElementById('gameCoins').textContent = GameState.coins;
+            document.getElementById('gameCoins').textContent = GameState.coinsThisGame;
             
             requestAnimationFrame(gameLoop);
         }
@@ -1688,6 +1793,7 @@
         function gameOver() {
             GameState.isRunning = false;
             
+            // Save statistics properly
             if (GameState.score > GameState.bestScore) {
                 GameState.bestScore = GameState.score;
                 localStorage.setItem('bestScore', GameState.bestScore);
@@ -1700,13 +1806,13 @@
             }
             
             GameState.totalGamesPlayed++;
-            GameState.totalCoins += GameState.coins;
+            GameState.totalCoins += GameState.coinsThisGame;
             localStorage.setItem('totalGamesPlayed', GameState.totalGamesPlayed);
             localStorage.setItem('totalCoins', GameState.totalCoins);
             
             document.getElementById('finalScore').textContent = GameState.score;
             document.getElementById('finalLevel').textContent = GameState.level;
-            document.getElementById('finalCoins').textContent = GameState.coins;
+            document.getElementById('finalCoins').textContent = GameState.coinsThisGame;
             document.getElementById('gameoverModal').classList.add('show');
             
             AudioSystem.playSound('gameover');
@@ -1733,6 +1839,31 @@
             GameState.currentScreen = screenName;
         }
 
+        // ============= CANVAS RESIZE =============
+        function resizeCanvas() {
+            const canvas = GameConfig.canvas;
+            const gameScreen = document.getElementById('gameScreen');
+            const header = document.querySelector('.game-header');
+            const controls = document.querySelector('.game-controls');
+            
+            if (gameScreen && header && controls) {
+                const availableHeight = window.innerHeight - header.offsetHeight - controls.offsetHeight;
+                const availableWidth = window.innerWidth;
+                
+                const aspectRatio = GameConfig.width / GameConfig.height;
+                let canvasWidth = availableWidth;
+                let canvasHeight = availableWidth / aspectRatio;
+                
+                if (canvasHeight > availableHeight) {
+                    canvasHeight = availableHeight;
+                    canvasWidth = canvasHeight * aspectRatio;
+                }
+                
+                canvas.style.width = canvasWidth + 'px';
+                canvas.style.height = canvasHeight + 'px';
+            }
+        }
+
         // ============= INITIALIZATION =============
         function init() {
             // Setup canvas
@@ -1744,6 +1875,13 @@
             
             // Initialize background
             initClouds();
+            
+            // Resize canvas
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            window.addEventListener('orientationchange', () => {
+                setTimeout(resizeCanvas, 100);
+            });
             
             // Create sakura petals
             const sakuraContainer = document.getElementById('sakuraContainer');
@@ -1767,6 +1905,18 @@
 
         // ============= EVENT LISTENERS =============
         function setupEventListeners() {
+            // Avatar selection
+            document.querySelectorAll('.avatar-option').forEach(avatar => {
+                avatar.addEventListener('click', function() {
+                    document.querySelectorAll('.avatar-option').forEach(a => a.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedAvatar = this.dataset.avatar;
+                });
+            });
+            
+            // Set default avatar selection
+            document.querySelector('.avatar-option[data-avatar="🦊"]').classList.add('selected');
+            
             // Enter button
             document.getElementById('enterBtn').addEventListener('click', () => {
                 if (!localStorage.getItem('playerName') || localStorage.getItem('playerName') === 'Guest') {
@@ -1776,11 +1926,13 @@
                 }
             });
             
-            // Save name
+            // Save name and avatar
             document.getElementById('saveNameBtn').addEventListener('click', () => {
                 const name = document.getElementById('playerNameInput').value.trim() || 'Guest';
                 GameState.playerName = name;
+                GameState.playerAvatar = selectedAvatar;
                 localStorage.setItem('playerName', name);
+                localStorage.setItem('playerAvatar', selectedAvatar);
                 document.getElementById('nameInputModal').classList.remove('active');
                 showScreen('menu');
             });
@@ -1788,11 +1940,15 @@
             // Menu buttons
             document.getElementById('playBtn').addEventListener('click', () => {
                 showScreen('game');
-                startGame();
+                setTimeout(() => {
+                    resizeCanvas();
+                    startGame();
+                }, 100);
             });
             
             document.getElementById('profileBtn').addEventListener('click', () => {
                 document.getElementById('profileName').textContent = GameState.playerName;
+                document.getElementById('profileAvatar').textContent = GameState.playerAvatar;
                 document.getElementById('profileBestScore').textContent = GameState.bestScore;
                 document.getElementById('profileGamesPlayed').textContent = GameState.totalGamesPlayed;
                 document.getElementById('profileTotalCoins').textContent = GameState.totalCoins;
@@ -1886,7 +2042,7 @@
                 }
             });
             
-            // Touch controls
+            // Touch controls with improved sensitivity
             GameConfig.canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
             GameConfig.canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
             GameConfig.canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
@@ -1905,6 +2061,7 @@
             
             touchStartY = e.touches[0].clientY;
             touchStartX = e.touches[0].clientX;
+            touchStartTime = Date.now();
         }
 
         function handleTouchMove(e) {
@@ -1917,23 +2074,35 @@
             
             const touchEndY = e.changedTouches[0].clientY;
             const touchEndX = e.changedTouches[0].clientX;
+            const touchEndTime = Date.now();
+            const touchDuration = touchEndTime - touchStartTime;
+            
             const diffY = touchStartY - touchEndY;
             const diffX = Math.abs(touchStartX - touchEndX);
             
-            // Swipe detection
-            if (Math.abs(diffY) > 30 && diffX < 50) {
+            // Check for double tap
+            if (touchDuration < TAP_THRESHOLD && touchEndTime - lastTouchEndTime < DOUBLE_TAP_THRESHOLD) {
+                jump(); // This will trigger double jump if available
+                lastTouchEndTime = 0; // Reset to prevent triple tap
+                return;
+            }
+            
+            // Swipe detection with improved sensitivity
+            if (Math.abs(diffY) > SWIPE_THRESHOLD && diffX < 80) {
                 if (diffY > 0) {
                     // Swipe up - Jump
                     jump();
                 } else {
                     // Swipe down - Duck
                     Player.ducking = true;
-                    setTimeout(() => { Player.ducking = false; }, 300);
+                    setTimeout(() => { Player.ducking = false; }, 400);
                 }
-            } else {
-                // Tap - Jump
+            } else if (touchDuration < TAP_THRESHOLD) {
+                // Quick tap - Jump
                 jump();
             }
+            
+            lastTouchEndTime = touchEndTime;
         }
 
         // ============= GAME START & RESET =============
@@ -1943,7 +2112,7 @@
             GameState.isPaused = false;
             
             if (GameState.firstTime && GameState.tutorialStep === 0) {
-                showTutorial('👆', 'Tap or press Space to jump!');
+                showTutorial('👆', 'Swipe up or tap to jump!');
             } else {
                 gameLoop();
             }
@@ -1953,7 +2122,7 @@
             GameState.score = 0;
             GameState.level = 1;
             GameState.combo = 0;
-            GameState.coins = 0;
+            GameState.coinsThisGame = 0;
             GameState.isRunning = false;
             GameState.isPaused = false;
             
@@ -1993,12 +2162,20 @@
         // Prevent context menu on long press
         window.addEventListener('contextmenu', (e) => e.preventDefault());
         
-        // Prevent pull-to-refresh
+        // Prevent pull-to-refresh and other gestures
         document.body.addEventListener('touchmove', (e) => {
-            if (e.touches.length > 1) {
+            e.preventDefault();
+        }, { passive: false });
+        
+        // Prevent double-tap zoom
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (e) => {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
                 e.preventDefault();
             }
-        }, { passive: false });
+            lastTouchEnd = now;
+        }, false);
     </script>
 </body>
 </html>
