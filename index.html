@@ -1,315 +1,733 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>ZenRex Runner ✨</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-  <style>
-    html, body {
-      margin:0; padding:0;
-      width:100%; height:100%;
-      overflow:hidden;
-      font-family: sans-serif;
-      background: #f0f5f0;
-      position: relative;
-    }
-    .screen {
-      position: absolute;
-      top:0; left:0;
-      width:100%; height:100%;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      background: #f0f5f0;
-    }
-    .active {
-      display: flex;
-    }
-    .loader {
-      border: 6px solid #ddd;
-      border-top: 6px solid #4a896d;
-      border-radius: 50%;
-      width:60px; height:60px;
-      animation: spin 1s linear infinite;
-      margin-bottom: 16px;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    button {
-      padding:12px 24px;
-      margin: 8px;
-      font-size:1rem;
-      border:none;
-      border-radius:8px;
-      background:#4a896d;
-      color:#fff;
-      cursor:pointer;
-    }
-    button:active {
-      transform: scale(0.95);
-    }
-    canvas {
-      border:2px solid #999;
-      border-radius:8px;
-      background:#fff;
-      touch-action:none;
-    }
-    #topBar {
-      width: 90%;
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    }
-    #topButtons {
-      width: 90%;
-      display: flex;
-      justify-content: space-around;
-      margin-bottom: 8px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenRex Runner Pro 🦖</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            max-width: 900px;
+            width: 90%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 2.5em;
+            color: #667eea;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            min-width: 120px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        #gameCanvas {
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            display: block;
+            margin: 0 auto;
+            background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 100%);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .instructions {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        .instructions h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .game-over {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .game-over.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .achievement {
+            position: fixed;
+            top: 20px;
+            right: -300px;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: right 0.5s ease;
+            z-index: 1001;
+        }
+
+        .achievement.show {
+            right: 20px;
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .easy { background: #4caf50; color: white; }
+        .medium { background: #ff9800; color: white; }
+        .hard { background: #f44336; color: white; }
+        .extreme { background: #9c27b0; color: white; }
+
+        @media (max-width: 768px) {
+            .title { font-size: 2em; }
+            .stat-box { min-width: 90px; padding: 10px 15px; }
+            .stat-value { font-size: 1.4em; }
+            #gameCanvas { width: 100% !important; height: auto !important; }
+        }
+    </style>
 </head>
 <body>
-  <!-- Loading -->
-  <div id="loading" class="screen active">
-    <div class="loader"></div>
-    <h1>ZenRex Runner 🦖</h1>
-    <p>Loading peaceful vibes… 🌿</p>
-  </div>
+    <div class="game-container">
+        <div class="header">
+            <h1 class="title">🦖 ZenRex Runner Pro</h1>
+            <p style="color: #666;">Run, Jump, and Master the Zen Way</p>
+        </div>
 
-  <!-- Title -->
-  <div id="title" class="screen">
-    <h1>ZenRex Runner 🦖</h1>
-    <p>“Run free, stay calm, be zen.”</p>
-    <p>Developed by Bikram</p>
-    <button id="btnEnter">Enter</button>
-  </div>
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-label">Score</div>
+                <div class="stat-value" id="score">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Best Score</div>
+                <div class="stat-value" id="bestScore">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Level</div>
+                <div class="stat-value" id="level">1</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Combos</div>
+                <div class="stat-value" id="combo">0</div>
+            </div>
+        </div>
 
-  <!-- Menu -->
-  <div id="menu" class="screen">
-    <h1>ZenRex Runner</h1>
-    <button id="btnStart">Start Game 🎮</button>
-    <button id="btnStats">Statistics 📊</button>
-    <button id="btnAbout">About ℹ️</button>
-  </div>
+        <canvas id="gameCanvas" width="800" height="400"></canvas>
 
-  <!-- Stats -->
-  <div id="stats" class="screen">
-    <h1>Statistics</h1>
-    <p>Best Score: <span id="bestScore">0</span></p>
-    <button id="btnStatsBack">Back</button>
-  </div>
+        <div class="controls">
+            <button class="btn" id="startBtn">Start Game</button>
+            <button class="btn" id="pauseBtn" style="display: none;">Pause</button>
+            <button class="btn" id="muteBtn">🔊 Sound</button>
+        </div>
 
-  <!-- About -->
-  <div id="about" class="screen">
-    <h1>About</h1>
-    <p>ZenRex Runner is a calm endless runner game inspired by Japanese Zen culture 🌿.</p>
-    <p>Developed by Bikram</p>
-    <button id="btnAboutBack">Back</button>
-  </div>
-
-  <!-- Game -->
-  <div id="game" class="screen">
-    <div id="topBar">
-      <div>Score: <span id="scoreDisplay">0</span></div>
-      <div>Best: <span id="bestDisplay">0</span></div>
+        <div class="instructions">
+            <h3>🎮 How to Play</h3>
+            <p><strong>Space/Up Arrow/Tap</strong> - Jump | <strong>Down Arrow</strong> - Duck | <strong>Double Jump</strong> - Unlocked at Level 3!</p>
+            <p>⭐ Collect coins for bonus points | 🔥 Build combos by consecutive jumps | 💎 Avoid obstacles!</p>
+            <div id="difficultyBadge" class="difficulty-badge easy">Difficulty: Easy</div>
+        </div>
     </div>
-    <div id="topButtons">
-      <button id="btnPause">Pause</button>
-      <button id="btnRestart">Restart</button>
-      <button id="btnMainMenu">Menu</button>
+
+    <div class="game-over" id="gameOver">
+        <h2 style="color: #667eea; font-size: 2.5em; margin-bottom: 20px;">Game Over! 🎮</h2>
+        <p style="font-size: 1.3em; margin-bottom: 10px;">Final Score: <strong id="finalScore">0</strong></p>
+        <p style="font-size: 1.2em; margin-bottom: 20px;">Level Reached: <strong id="finalLevel">0</strong></p>
+        <button class="btn" id="restartBtn">Play Again</button>
     </div>
-    <canvas id="canvasGame"></canvas>
-    <button id="btnJump">Jump ⬆️</button>
-  </div>
 
-  <!-- Pause -->
-  <div id="pause" class="screen">
-    <h1>Paused</h1>
-    <button id="btnResume">Resume ▶️</button>
-  </div>
+    <div class="achievement" id="achievement">
+        <strong id="achievementText"></strong>
+    </div>
 
-  <!-- Result -->
-  <div id="result" class="screen">
-    <h1>Game Over</h1>
-    <p>Your Score: <span id="finalScore">0</span></p>
-    <button id="btnNext">Next 🔁</button>
-    <button id="btnResultMenu">Menu 🏠</button>
-  </div>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        let gameState = {
+            isRunning: false,
+            isPaused: false,
+            score: 0,
+            bestScore: parseInt(localStorage.getItem('bestScore')) || 0,
+            level: 1,
+            combo: 0,
+            maxCombo: 0,
+            coins: 0,
+            jumps: 0,
+            soundEnabled: true,
+            difficulty: 'easy',
+            achievements: JSON.parse(localStorage.getItem('achievements')) || [],
+            totalGames: parseInt(localStorage.getItem('totalGames')) || 0
+        };
 
-<script>
-  const $ = id => document.getElementById(id);
-  const screens = {
-    loading: $('loading'),
-    title: $('title'),
-    menu: $('menu'),
-    stats: $('stats'),
-    about: $('about'),
-    game: $('game'),
-    pause: $('pause'),
-    result: $('result')
-  };
-  function showScreen(name) {
-    for (let k in screens) screens[k].classList.remove('active');
-    screens[name].classList.add('active');
-    current = name;
-  }
+        const player = {
+            x: 50,
+            y: 300,
+            width: 40,
+            height: 50,
+            velocityY: 0,
+            jumping: false,
+            ducking: false,
+            canDoubleJump: false,
+            hasDoubleJumped: false,
+            color: '#4caf50'
+        };
 
-  let best = parseInt(localStorage.getItem('zenrex_best') || '0', 10);
+        const game = {
+            gravity: 0.8,
+            jumpPower: -15,
+            groundY: 300,
+            speed: 6,
+            obstacles: [],
+            coins: [],
+            clouds: [],
+            particles: [],
+            lastObstacleTime: 0,
+            obstacleInterval: 1500,
+            lastCoinTime: 0,
+            coinInterval: 2000
+        };
 
-  // after 3s, go to title
-  setTimeout(() => {
-    showScreen('title');
-  }, 3000);
+        document.getElementById('bestScore').textContent = gameState.bestScore;
 
-  // Button wiring
-  $('btnEnter').onclick = () => showScreen('menu');
-  $('btnStart').onclick = () => { startGame(); };
-  $('btnStats').onclick = () => {
-    $('bestScore').innerText = best;
-    showScreen('stats');
-  };
-  $('btnAbout').onclick = () => showScreen('about');
-  $('btnStatsBack').onclick = () => showScreen('menu');
-  $('btnAboutBack').onclick = () => showScreen('menu');
-  $('btnPause').onclick = () => pauseGame();
-  $('btnResume').onclick = () => resumeGame();
-  $('btnRestart').onclick = () => startGame();
-  $('btnMainMenu').onclick = () => { stopGame(); showScreen('menu'); };
-  $('btnNext').onclick = () => startGame();
-  $('btnResultMenu').onclick = () => showScreen('menu');
+        for (let i = 0; i < 5; i++) {
+            game.clouds.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * 100,
+                width: 60 + Math.random() * 40,
+                speed: 0.5 + Math.random() * 0.5
+            });
+        }
 
-  const canvas = $('canvasGame');
-  const ctx = canvas.getContext('2d');
-  let groundY;
+        function drawPlayer() {
+            ctx.save();
+            
+            if (player.ducking) {
+                ctx.fillStyle = player.color;
+                ctx.fillRect(player.x, player.y + 20, player.width, player.height - 20);
+                ctx.fillStyle = '#333';
+                ctx.fillRect(player.x + 5, player.y + 25, 8, 8);
+            } else {
+                ctx.fillStyle = player.color;
+                ctx.fillRect(player.x, player.y, player.width, player.height);
+                
+                ctx.fillStyle = '#2e7d32';
+                ctx.fillRect(player.x + 10, player.y - 10, 20, 10);
+                
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(player.x + 5, player.y + 10, 10, 10);
+                ctx.fillStyle = '#333';
+                ctx.fillRect(player.x + 7, player.y + 12, 6, 6);
+                
+                const legOffset = Math.sin(Date.now() / 100) * 5;
+                ctx.fillStyle = player.color;
+                ctx.fillRect(player.x + 8, player.y + player.height, 8, 15 + legOffset);
+                ctx.fillRect(player.x + 24, player.y + player.height, 8, 15 - legOffset);
+            }
+            
+            ctx.restore();
+        }
 
-  function resizeCanvas() {
-    canvas.width = Math.floor(window.innerWidth * 0.9);
-    canvas.height = Math.floor(window.innerHeight * 0.4);
-    groundY = canvas.height - 50;
-  }
-  window.addEventListener('resize', resizeCanvas);
-  resizeCanvas();
+        function drawObstacle(obstacle) {
+            ctx.fillStyle = obstacle.type === 'cactus' ? '#2d5016' : '#8b4513';
+            
+            if (obstacle.type === 'cactus') {
+                ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                ctx.fillRect(obstacle.x - 10, obstacle.y + 10, 10, 20);
+                ctx.fillRect(obstacle.x + obstacle.width, obstacle.y + 15, 10, 15);
+            } else if (obstacle.type === 'rock') {
+                ctx.beginPath();
+                ctx.moveTo(obstacle.x, obstacle.y + obstacle.height);
+                ctx.lineTo(obstacle.x + obstacle.width / 2, obstacle.y);
+                ctx.lineTo(obstacle.x + obstacle.width, obstacle.y + obstacle.height);
+                ctx.closePath();
+                ctx.fill();
+            } else {
+                const wingFlap = Math.sin(Date.now() / 100) * 10;
+                ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                ctx.fillRect(obstacle.x - 15, obstacle.y + 10 + wingFlap, 15, 5);
+                ctx.fillRect(obstacle.x + obstacle.width, obstacle.y + 10 - wingFlap, 15, 5);
+            }
+        }
 
-  const gravity = 1.3;
-  const jumpV = -18;
-  let speed;
+        function drawCoin(coin) {
+            const pulse = Math.sin(Date.now() / 200) * 3;
+            ctx.fillStyle = '#FFD700';
+            ctx.beginPath();
+            ctx.arc(coin.x, coin.y, coin.radius + pulse, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#FFA500';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            ctx.fillStyle = '#FFA500';
+            ctx.font = 'bold 12px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('$', coin.x, coin.y + 4);
+        }
 
-  let dino, obstacles, score, running, paused;
+        function drawClouds() {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            game.clouds.forEach(cloud => {
+                ctx.beginPath();
+                ctx.arc(cloud.x, cloud.y, 20, 0, Math.PI * 2);
+                ctx.arc(cloud.x + 20, cloud.y, 25, 0, Math.PI * 2);
+                ctx.arc(cloud.x + 40, cloud.y, 20, 0, Math.PI * 2);
+                ctx.fill();
+                
+                cloud.x -= cloud.speed;
+                if (cloud.x < -cloud.width) {
+                    cloud.x = canvas.width + Math.random() * 100;
+                }
+            });
+        }
 
-  function resetGame() {
-    speed = 6;
-    dino = { x:50, y:0, w:40, h:40, vy:0, jumping:false };
-    dino.y = groundY - dino.h;
-    obstacles = [];
-    score = 0;
-    running = true;
-    paused = false;
-    $('scoreDisplay').innerText = '0';
-    $('bestDisplay').innerText = best.toString();
-  }
+        function drawParticles() {
+            game.particles.forEach((particle, index) => {
+                ctx.fillStyle = particle.color;
+                ctx.globalAlpha = particle.alpha;
+                ctx.fillRect(particle.x, particle.y, particle.size, particle.size);
+                
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+                particle.alpha -= 0.02;
+                
+                if (particle.alpha <= 0) {
+                    game.particles.splice(index, 1);
+                }
+            });
+            ctx.globalAlpha = 1;
+        }
 
-  function spawnObstacle() {
-    if (obstacles.length > 0) {
-      let last = obstacles[obstacles.length - 1];
-      if (last.x > canvas.width - 200) return;
-    }
-    let h = Math.random() > 0.5 ? 30 : 60;
-    let w = 20 + Math.random()*15;
-    obstacles.push({ x: canvas.width, y: groundY - h, w: w, h: h });
-  }
+        function createParticles(x, y, color, count = 10) {
+            for (let i = 0; i < count; i++) {
+                game.particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 5,
+                    vy: (Math.random() - 0.5) * 5,
+                    size: Math.random() * 5 + 2,
+                    color: color,
+                    alpha: 1
+                });
+            }
+        }
 
-  function gameLoop() {
-    if (!running) return;
-    if (!paused) {
-      update();
-      draw();
-    }
-    requestAnimationFrame(gameLoop);
-  }
+        function spawnObstacle() {
+            const now = Date.now();
+            if (now - game.lastObstacleTime > game.obstacleInterval) {
+                const types = ['cactus', 'rock', 'bird'];
+                const type = types[Math.floor(Math.random() * types.length)];
+                
+                let obstacle = {
+                    x: canvas.width,
+                    type: type,
+                    width: 30,
+                    height: 40,
+                    y: game.groundY
+                };
+                
+                if (type === 'bird') {
+                    obstacle.y = game.groundY - 80 - Math.random() * 60;
+                    obstacle.height = 30;
+                } else if (type === 'rock') {
+                    obstacle.width = 35;
+                    obstacle.height = 35;
+                    obstacle.y = game.groundY + 15;
+                }
+                
+                game.obstacles.push(obstacle);
+                game.lastObstacleTime = now;
+            }
+        }
 
-  function update() {
-    dino.y += dino.vy;
-    dino.vy += gravity;
-    if (dino.y >= groundY - dino.h) {
-      dino.y = groundY - dino.h;
-      dino.vy = 0;
-      dino.jumping = false;
-    }
-    for (let o of obstacles) {
-      o.x -= speed;
-    }
-    obstacles = obstacles.filter(o => o.x + o.w > 0);
-    if (Math.random() < 0.02) spawnObstacle();
+        function spawnCoin() {
+            const now = Date.now();
+            if (now - game.lastCoinTime > game.coinInterval && Math.random() < 0.4) {
+                game.coins.push({
+                    x: canvas.width,
+                    y: game.groundY - 50 - Math.random() * 100,
+                    radius: 12,
+                    collected: false
+                });
+                game.lastCoinTime = now;
+            }
+        }
 
-    for (let o of obstacles) {
-      if (dino.x < o.x + o.w && dino.x + dino.w > o.x &&
-          dino.y < o.y + o.h && dino.y + dino.h > o.y) {
-        endGame();
-        break;
-      }
-    }
+        function checkCollision(rect1, rect2) {
+            return rect1.x < rect2.x + rect2.width &&
+                   rect1.x + rect1.width > rect2.x &&
+                   rect1.y < rect2.y + rect2.height &&
+                   rect1.y + rect1.height > rect2.y;
+        }
 
-    score++;
-    if (score > best) {
-      best = score;
-      localStorage.setItem('zenrex_best', best.toString());
-    }
-    $('scoreDisplay').innerText = score.toString();
-    $('bestDisplay').innerText = best.toString();
-  }
+        function updateDifficulty() {
+            const oldLevel = gameState.level;
+            gameState.level = Math.floor(gameState.score / 500) + 1;
+            
+            if (gameState.level !== oldLevel) {
+                showAchievement(`🎉 Level ${gameState.level} Unlocked!`);
+                if (gameState.level === 3) {
+                    showAchievement('🚀 Double Jump Unlocked!');
+                    player.canDoubleJump = true;
+                }
+            }
+            
+            game.speed = 6 + (gameState.level - 1) * 0.8;
+            game.obstacleInterval = Math.max(800, 1500 - (gameState.level - 1) * 100);
+            
+            if (gameState.level <= 2) {
+                gameState.difficulty = 'easy';
+                player.color = '#4caf50';
+            } else if (gameState.level <= 5) {
+                gameState.difficulty = 'medium';
+                player.color = '#ff9800';
+            } else if (gameState.level <= 10) {
+                gameState.difficulty = 'hard';
+                player.color = '#f44336';
+            } else {
+                gameState.difficulty = 'extreme';
+                player.color = '#9c27b0';
+            }
+            
+            document.getElementById('difficultyBadge').textContent = `Difficulty: ${gameState.difficulty.charAt(0).toUpperCase() + gameState.difficulty.slice(1)}`;
+            document.getElementById('difficultyBadge').className = `difficulty-badge ${gameState.difficulty}`;
+        }
 
-  function draw() {
-    ctx.clearRect(0,0,canvas.width, canvas.height);
-    ctx.fillStyle = '#888';
-    ctx.fillRect(0, groundY, canvas.width, 4);
-    ctx.fillStyle = '#333';
-    ctx.fillRect(dino.x, dino.y, dino.w, dino.h);
-    ctx.fillStyle = '#4a896d';
-    obstacles.forEach(o => ctx.fillRect(o.x, o.y, o.w, o.h));
-  }
+        function showAchievement(text) {
+            const achievement = document.getElementById('achievement');
+            document.getElementById('achievementText').textContent = text;
+            achievement.classList.add('show');
+            
+            if (gameState.soundEnabled) {
+                playSound('achievement');
+            }
+            
+            setTimeout(() => {
+                achievement.classList.remove('show');
+            }, 3000);
+        }
 
-  function jump() {
-    if (!dino.jumping) {
-      dino.vy = jumpV;
-      dino.jumping = true;
-      if (navigator.vibrate) navigator.vibrate(30);
-    }
-  }
+        function playSound(type) {
+            if (!gameState.soundEnabled) return;
+            
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            if (type === 'jump') {
+                oscillator.frequency.value = 500;
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.1);
+            } else if (type === 'coin') {
+                oscillator.frequency.value = 800;
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.15);
+            } else if (type === 'achievement') {
+                oscillator.frequency.value = 600;
+                gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.3);
+            } else if (type === 'gameover') {
+                oscillator.frequency.value = 200;
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+            }
+        }
 
-  window.addEventListener('keydown', e => {
-    if (e.code === 'Space' || e.code === 'ArrowUp') {
-      jump();
-    }
-  });
-  $('btnJump').onclick = () => jump();
+        function gameOver() {
+            gameState.isRunning = false;
+            
+            if (gameState.score > gameState.bestScore) {
+                gameState.bestScore = gameState.score;
+                localStorage.setItem('bestScore', gameState.bestScore);
+                showAchievement('🏆 New High Score!');
+            }
+            
+            document.getElementById('finalScore').textContent = gameState.score;
+            document.getElementById('finalLevel').textContent = gameState.level;
+            document.getElementById('gameOver').classList.add('show');
+            
+            playSound('gameover');
+        }
 
-  function pauseGame() {
-    if (!running) return;
-    paused = true;
-    showScreen('pause');
-  }
-  function resumeGame() {
-    paused = false;
-    showScreen('game');
-    gameLoop();
-  }
-  function stopGame() {
-    running = false;
-  }
-  function endGame() {
-    running = false;
-    $('finalScore').innerText = score;
-    showScreen('result');
-  }
-  function startGame() {
-    resetGame();
-    showScreen('game');
-    gameLoop();
-  }
+        function jump() {
+            if (!player.jumping) {
+                player.velocityY = game.jumpPower;
+                player.jumping = true;
+                player.hasDoubleJumped = false;
+                gameState.jumps++;
+                playSound('jump');
+            } else if (player.canDoubleJump && !player.hasDoubleJumped) {
+                player.velocityY = game.jumpPower;
+                player.hasDoubleJumped = true;
+                createParticles(player.x + player.width / 2, player.y + player.height, '#4caf50', 15);
+                playSound('jump');
+            }
+        }
 
-</script>
+        function update() {
+            if (!gameState.isRunning || gameState.isPaused) return;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            drawClouds();
+            
+            ctx.fillStyle = '#90EE90';
+            ctx.fillRect(0, game.groundY + player.height, canvas.width, canvas.height);
+            
+            player.velocityY += game.gravity;
+            player.y += player.velocityY;
+            
+            if (player.y >= game.groundY) {
+                player.y = game.groundY;
+                player.velocityY = 0;
+                player.jumping = false;
+                player.hasDoubleJumped = false;
+            }
+            
+            drawPlayer();
+            
+            spawnObstacle();
+            spawnCoin();
+            
+            game.obstacles.forEach((obstacle, index) => {
+                obstacle.x -= game.speed;
+                drawObstacle(obstacle);
+                
+                const playerRect = {
+                    x: player.x + 5,
+                    y: player.ducking ? player.y + 20 : player.y,
+                    width: player.width - 10,
+                    height: player.ducking ? player.height - 20 : player.height
+                };
+                
+                if (checkCollision(playerRect, obstacle)) {
+                    gameOver();
+                }
+                
+                if (obstacle.x + obstacle.width < 0) {
+                    game.obstacles.splice(index, 1);
+                    gameState.score += 10;
+                    gameState.combo++;
+                    if (gameState.combo > gameState.maxCombo) {
+                        gameState.maxCombo = gameState.combo;
+                    }
+                }
+            });
+            
+            game.coins.forEach((coin, index) => {
+                coin.x -= game.speed;
+                drawCoin(coin);
+                
+                const distance = Math.sqrt(
+                    Math.pow(coin.x - (player.x + player.width / 2), 2) +
+                    Math.pow(coin.y - (player.y + player.height / 2), 2)
+                );
+                
+                if (distance < player.width && !coin.collected) {
+                    coin.collected = true;
+                    gameState.score += 50;
+                    gameState.coins++;
+                    createParticles(coin.x, coin.y, '#FFD700', 20);
+                    playSound('coin');
+                    game.coins.splice(index, 1);
+                }
+                
+                if (coin.x + coin.radius < 0) {
+                    game.coins.splice(index, 1);
+                }
+            });
+            
+            drawParticles();
+            
+            gameState.score += 1;
+            updateDifficulty();
+            
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('level').textContent = gameState.level;
+            document.getElementById('combo').textContent = gameState.combo;
+            
+            requestAnimationFrame(update);
+        }
+
+        document.getElementById('startBtn').addEventListener('click', () => {
+            if (!gameState.isRunning) {
+                gameState.isRunning = true;
+                gameState.score = 0;
+                gameState.level = 1;
+                gameState.combo = 0;
+                gameState.coins = 0;
+                game.obstacles = [];
+                game.coins = [];
+                player.y = game.groundY;
+                player.velocityY = 0;
+                player.jumping = false;
+                player.canDoubleJump = false;
+                document.getElementById('startBtn').style.display = 'none';
+                document.getElementById('pauseBtn').style.display = 'inline-block';
+                update();
+            }
+        });
+
+        document.getElementById('pauseBtn').addEventListener('click', () => {
+            gameState.isPaused = !gameState.isPaused;
+            document.getElementById('pauseBtn').textContent = gameState.isPaused ? 'Resume' : 'Pause';
+            if (!gameState.isPaused) {
+                update();
+            }
+        });
+
+        document.getElementById('restartBtn').addEventListener('click', () => {
+            document.getElementById('gameOver').classList.remove('show');
+            document.getElementById('startBtn').style.display = 'inline-block';
+            document.getElementById('pauseBtn').style.display = 'none';
+            gameState.isRunning = false;
+            gameState.isPaused = false;
+        });
+
+        document.getElementById('muteBtn').addEventListener('click', () => {
+            gameState.soundEnabled = !gameState.soundEnabled;
+            document.getElementById('muteBtn').textContent = gameState.soundEnabled ? '🔊 Sound' : '🔇 Muted';
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (!gameState.isRunning || gameState.isPaused) return;
+            
+            if (e.code === 'Space' || e.code === 'ArrowUp') {
+                e.preventDefault();
+                jump();
+            } else if (e.code === 'ArrowDown') {
+                e.preventDefault();
+                player.ducking = true;
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            if (e.code === 'ArrowDown') {
+                player.ducking = false;
+            }
+        });
+
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (gameState.isRunning && !gameState.isPaused) {
+                jump();
+            }
+        });
+
+        canvas.addEventListener('click', () => {
+            if (gameState.isRunning && !gameState.isPaused) {
+                jump();
+            }
+        });
+    </script>
 </body>
 </html>
