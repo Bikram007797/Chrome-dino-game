@@ -281,6 +281,7 @@
             align-items: center;
             z-index: 10001;
             padding: 20px;
+            overflow: hidden;
         }
 
         .modal.active {
@@ -295,28 +296,17 @@
             width: 100%;
             max-height: 80vh;
             overflow-y: auto;
+            overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
             animation: scaleIn 0.3s ease;
             position: relative;
+            overscroll-behavior: contain;
         }
 
         .modal-content::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .modal-content::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-
-        .modal-content::-webkit-scrollbar-thumb {
-            background: #a8727d;
-            border-radius: 10px;
-        }
-
-        .modal-content::-webkit-scrollbar-thumb:hover {
-            background: #8b5a65;
+            width: 0px;
+            display: none;
         }
 
         @keyframes scaleIn {
@@ -742,6 +732,39 @@
         @media (max-width: 480px) {
             .avatar-grid {
                 grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .modal {
+                padding: 10px;
+                align-items: flex-start;
+                padding-top: 20px;
+            }
+            
+            .modal-content {
+                max-height: 85vh;
+                padding: 25px 20px;
+                margin: auto 0;
+            }
+            
+            .modal-title {
+                position: sticky;
+                top: -25px;
+                background: white;
+                padding: 15px 0 10px 0;
+                margin: -25px -20px 15px -20px;
+                padding-left: 20px;
+                padding-right: 20px;
+                z-index: 10;
+                border-bottom: 2px solid #ffecd2;
+            }
+            
+            .modal-close {
+                position: sticky;
+                bottom: -25px;
+                background: linear-gradient(135deg, #d4a5a5, #a8727d);
+                margin: 20px -20px -25px -20px;
+                border-radius: 0 0 20px 20px;
+                padding: 15px 30px;
             }
         }
     </style>
@@ -1642,7 +1665,9 @@
                 }
             }
             
-            Game.speed = GameConfig.baseSpeed + (GameState.level - 1) * 0.7;
+            // Apply speed boost effect
+            const baseSpeed = GameConfig.baseSpeed + (GameState.level - 1) * 0.7;
+            Game.speed = Game.activePowerup === 'speed' ? baseSpeed * 1.8 : baseSpeed;
             Game.obstacleInterval = Math.max(800, 1500 - (GameState.level - 1) * 80);
         }
 
@@ -1711,7 +1736,8 @@
             
             // Update and draw obstacles
             Game.obstacles.forEach((obs, index) => {
-                obs.x -= Game.speed;
+                const speedMod = Game.activePowerup === 'slowmo' ? 0.5 : 1;
+                obs.x -= Game.speed * speedMod;
                 drawObstacle(obs);
                 
                 const playerRect = {
@@ -1727,6 +1753,8 @@
                     } else {
                         createParticles(obs.x, obs.y, '#00bfff', 20);
                         Game.obstacles.splice(index, 1);
+                        GameState.score += 10;
+                        GameState.combo++;
                     }
                 }
                 
@@ -1742,19 +1770,21 @@
                 coin.x -= Game.speed;
                 drawCoin(coin);
                 
-                const magnetRange = Game.activePowerup === 'magnet' ? 100 : 40;
+                const magnetRange = Game.activePowerup === 'magnet' ? 150 : 40;
                 const distance = Math.sqrt(
                     Math.pow(coin.x - (Player.x + Player.width / 2), 2) +
                     Math.pow(coin.y - (Player.y + Player.height / 2), 2)
                 );
                 
+                // Magnet effect - pull coins towards player
                 if (Game.activePowerup === 'magnet' && distance < magnetRange) {
                     const angle = Math.atan2((Player.y + Player.height / 2) - coin.y, (Player.x + Player.width / 2) - coin.x);
-                    coin.x += Math.cos(angle) * 5;
-                    coin.y += Math.sin(angle) * 5;
+                    const pullSpeed = 8;
+                    coin.x += Math.cos(angle) * pullSpeed;
+                    coin.y += Math.sin(angle) * pullSpeed;
                 }
                 
-                if (distance < 30 && !coin.collected) {
+                if (distance < 35 && !coin.collected) {
                     coin.collected = true;
                     GameState.score += 50;
                     GameState.coinsThisGame++;
@@ -1771,8 +1801,8 @@
             
             // Update and draw powerups
             Game.powerups.forEach((powerup, index) => {
-                const speedMod = Game.activePowerup === 'slowmo' ? 0.5 : 1;
-                powerup.x -= Game.speed * speedMod;
+                const speedMod = Game.activePowerup === 'slowmo' ? 0.5 : (Game.activePowerup === 'speed' ? 1.5 : 1);
+                powerup.x -= Game.speed * (Game.activePowerup === 'slowmo' ? 0.5 : 1);
                 drawPowerup(powerup);
                 
                 const distance = Math.sqrt(
@@ -1780,7 +1810,7 @@
                     Math.pow(powerup.y - (Player.y + Player.height / 2), 2)
                 );
                 
-                if (distance < 35) {
+                if (distance < 40) {
                     activatePowerup(powerup.type);
                     createParticles(powerup.x, powerup.y, getPowerupColor(powerup.type), 25);
                     Game.powerups.splice(index, 1);
@@ -1937,6 +1967,41 @@
             // Set default avatar selection
             document.querySelector('.avatar-option[data-avatar="🦊"]').classList.add('selected');
             
+            // Modal touch scroll handling
+            const modals = ['profileModal', 'howToPlayModal', 'aboutModal'];
+            modals.forEach(modalId => {
+                const modal = document.getElementById(modalId);
+                const modalContent = modal.querySelector('.modal-content');
+                
+                let startY = 0;
+                let currentY = 0;
+                let isDragging = false;
+                
+                modalContent.addEventListener('touchstart', (e) => {
+                    startY = e.touches[0].clientY;
+                    currentY = modalContent.scrollTop;
+                    isDragging = true;
+                }, { passive: true });
+                
+                modalContent.addEventListener('touchmove', (e) => {
+                    if (!isDragging) return;
+                    const touchY = e.touches[0].clientY;
+                    const deltaY = startY - touchY;
+                    modalContent.scrollTop = currentY + deltaY;
+                }, { passive: true });
+                
+                modalContent.addEventListener('touchend', () => {
+                    isDragging = false;
+                }, { passive: true });
+                
+                // Prevent background scroll
+                modal.addEventListener('touchmove', (e) => {
+                    if (e.target === modal) {
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+            });
+            
             // Enter button
             document.getElementById('enterBtn').addEventListener('click', () => {
                 if (!localStorage.getItem('playerName') || localStorage.getItem('playerName') === 'Guest') {
@@ -1974,27 +2039,33 @@
                 document.getElementById('profileTotalCoins').textContent = GameState.totalCoins;
                 document.getElementById('profileMaxLevel').textContent = GameState.maxLevel;
                 document.getElementById('profileModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
             });
             
             document.getElementById('howToPlayBtn').addEventListener('click', () => {
                 document.getElementById('howToPlayModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
             });
             
             document.getElementById('aboutBtn').addEventListener('click', () => {
                 document.getElementById('aboutModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
             });
             
             // Close modals
             document.getElementById('closeProfileBtn').addEventListener('click', () => {
                 document.getElementById('profileModal').classList.remove('active');
+                document.body.style.overflow = '';
             });
             
             document.getElementById('closeHowToPlayBtn').addEventListener('click', () => {
                 document.getElementById('howToPlayModal').classList.remove('active');
+                document.body.style.overflow = '';
             });
             
             document.getElementById('closeAboutBtn').addEventListener('click', () => {
                 document.getElementById('aboutModal').classList.remove('active');
+                document.body.style.overflow = '';
             });
             
             // Game controls
