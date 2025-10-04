@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>和 ZenFlow Runner</title>
-    <!--
+ <!--
     ══════════════════════════════════════════════════════════════
     和 ZenFlow Runner - Japanese Endless Runner Game
     Copyright © 2025 Bikram. All Rights Reserved.
@@ -48,8 +48,7 @@
             background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
             touch-action: none;
         }
-
-        body::after {
+  body::after {
             content: '© 2025 Bikram';
             position: fixed;
             bottom: 5px;
@@ -60,6 +59,7 @@
             pointer-events: none;
         }
 
+        /* Sakura Petals Animation */
         .sakura-container {
             position: fixed;
             top: 0;
@@ -91,6 +91,7 @@
             }
         }
 
+        /* Loading Screen */
         .loading-screen {
             position: fixed;
             top: 0;
@@ -147,6 +148,7 @@
             margin-top: 20px;
         }
 
+        /* Title Screen */
         .title-screen {
             position: fixed;
             top: 0;
@@ -230,6 +232,7 @@
             transform: scale(0.95);
         }
 
+        /* Main Menu */
         .main-menu {
             position: fixed;
             top: 0;
@@ -290,6 +293,7 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
+        /* Modal Screens */
         .modal {
             position: fixed;
             top: 0;
@@ -396,6 +400,7 @@
             color: #a8727d;
         }
 
+        /* Game Screen - FULL SCREEN MOBILE */
         .game-screen {
             position: fixed;
             top: 0;
@@ -480,6 +485,7 @@
             transform: translateY(2px);
         }
 
+        /* Tutorial Overlay */
         .tutorial-overlay {
             position: fixed;
             top: 0;
@@ -533,6 +539,7 @@
             width: 100%;
         }
 
+        /* Achievement Toast */
         .achievement-toast {
             position: fixed;
             top: -100px;
@@ -556,6 +563,7 @@
             top: 20px;
         }
 
+        /* Power-up Display */
         .powerup-display {
             position: fixed;
             bottom: 80px;
@@ -585,6 +593,7 @@
             color: #a8727d;
         }
 
+        /* Game Over Modal */
         .gameover-modal {
             position: fixed;
             top: 50%;
@@ -640,6 +649,7 @@
             min-width: 120px;
         }
 
+        /* Name Input */
         .name-input-modal {
             position: fixed;
             top: 0;
@@ -785,27 +795,58 @@
     </style>
 </head>
 <body>
-    <!-- Anti-Copy Protection -->
-    <script>
-    (function(){const _0x1a2b=['contextmenu','addEventListener','preventDefault','keydown','ctrlKey','key','shiftKey','F12','%c© 2025 Bikram - All Rights Reserved','color: #a8727d; font-size: 16px; font-weight: bold;','%cUnauthorized copying, modification, or distribution is prohibited.','color: #ff6b6b; font-size: 12px;','log','%c⚠️ Unauthorized code inspection detected','color: red; font-size: 20px;','toString'];(function(_0x4d8e,_0x1a2b){const _0x5c3d=function(_0x2f1e){while(--_0x2f1e){_0x4d8e['push'](_0x4d8e['shift']());}};_0x5c3d(++_0x1a2b);}(_0x1a2b,0x1f4));document[_0x1a2b[1]](_0x1a2b[0],e=>e[_0x1a2b[2]]());document[_0x1a2b[1]](_0x1a2b[3],e=>{if((e[_0x1a2b[4]]&&(['u','s','c'][includes](e[_0x1a2b[5]])))||(e[_0x1a2b[4]]&&e[_0x1a2b[6]]&&(['I','J','C'][includes](e[_0x1a2b[5]])))||e[_0x1a2b[5]]===_0x1a2b[7]){e[_0x1a2b[2]]();return false;}});console[_0x1a2b[12]](_0x1a2b[8],_0x1a2b[9]);console[_0x1a2b[12]](_0x1a2b[10],_0x1a2b[11]);(function(){const devtools=/./;devtools[_0x1a2b[15]]=function(){console[_0x1a2b[12]](_0x1a2b[13],_0x1a2b[14]);};console[_0x1a2b[12]]('%c',devtools);})();})();
-    </script>
+<!-- Anti-Copy Protection -->
+<script>
+// Disable right-click
+document.addEventListener('contextmenu', e => e.preventDefault());
 
+// Disable common copy shortcuts
+document.addEventListener('keydown', e => {
+    if ((e.ctrlKey && (e.key === 'u' || e.key === 's' || e.key === 'c')) || 
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
+        e.key === 'F12') {
+        e.preventDefault();
+        return false;
+    }
+});
+
+// Basic DevTools detection
+(function() {
+    const devtools = /./;
+    devtools.toString = function() {
+        console.log('%c⚠️ Unauthorized code inspection detected', 'color: red; font-size: 20px;');
+    };
+    console.log('%c', devtools);
+})();
+
+// Copyright notice in console
+console.log('%c© 2025 Bikram - All Rights Reserved', 'color: #a8727d; font-size: 16px; font-weight: bold;');
+console.log('%cUnauthorized copying, modification, or distribution is prohibited.', 'color: #ff6b6b; font-size: 12px;');
+</script>
+    <!-- Sakura Petals -->
     <div class="sakura-container" id="sakuraContainer"></div>
+
+    <!-- Loading Screen -->
     <div class="loading-screen" id="loadingScreen">
         <div class="loading-title">和 ZenFlow Runner</div>
         <div class="loading-spinner"></div>
         <div class="loading-dev">Developed by Bikram</div>
     </div>
+
+    <!-- Title Screen -->
     <div class="title-screen" id="titleScreen">
         <div class="title-logo">和 ZenFlow Runner</div>
         <div class="title-subtitle">Developed by Bikram</div>
         <button class="enter-btn" id="enterBtn">Enter</button>
     </div>
+
+    <!-- Name Input Modal -->
     <div class="name-input-modal" id="nameInputModal">
         <div class="name-input-box">
             <div class="name-input-title">Welcome, Runner!</div>
-            <p style="margin-bottom:20px;color:#666;font-size:clamp(0.9em,3.5vw,1em);">Create your profile</p>
+            <p style="margin-bottom: 20px; color: #666; font-size: clamp(0.9em, 3.5vw, 1em);">Create your profile</p>
             <input type="text" class="name-input-field" id="playerNameInput" placeholder="Enter your name" maxlength="15">
+            
             <div class="avatar-section">
                 <div class="avatar-label">Choose your avatar</div>
                 <div class="avatar-grid" id="avatarGrid">
@@ -823,9 +864,12 @@
                     <div class="avatar-option" data-avatar="🦅">🦅</div>
                 </div>
             </div>
+            
             <button class="name-input-btn" id="saveNameBtn">Start Adventure</button>
         </div>
     </div>
+
+    <!-- Main Menu -->
     <div class="main-menu" id="mainMenu">
         <div class="menu-title">和 ZenFlow Runner</div>
         <div class="menu-buttons">
@@ -835,12 +879,14 @@
             <button class="menu-btn" id="aboutBtn">ℹ️ About</button>
         </div>
     </div>
+
+    <!-- Profile Modal -->
     <div class="modal" id="profileModal">
         <div class="modal-content">
             <div class="modal-title">Player Profile</div>
-            <div style="text-align:center;margin-bottom:20px;">
+            <div style="text-align: center; margin-bottom: 20px;">
                 <div class="profile-avatar" id="profileAvatar">🦊</div>
-                <div style="font-size:clamp(1.2em,5vw,1.5em);color:#a8727d;font-weight:bold;margin-top:10px;" id="profileName">Guest</div>
+                <div style="font-size: clamp(1.2em, 5vw, 1.5em); color: #a8727d; font-weight: bold; margin-top: 10px;" id="profileName">Guest</div>
             </div>
             <div class="stats-grid">
                 <div class="stat-card">
@@ -863,34 +909,88 @@
             <button class="modal-close" id="closeProfileBtn">Close</button>
         </div>
     </div>
+
+    <!-- How to Play Modal -->
     <div class="modal" id="howToPlayModal">
         <div class="modal-content">
             <div class="modal-title">How to Play</div>
-            <div class="modal-text"><strong>🦊 Meet Kitsune:</strong><br>Guide the mystical fox spirit through sacred Japanese gardens!</div>
-            <div class="modal-text"><strong>🎮 Controls:</strong><br>• <strong>Tap/Space/Up Arrow:</strong> Jump<br>• <strong>Swipe Up:</strong> Jump<br>• <strong>Swipe Down:</strong> Duck<br>• <strong>Double Tap:</strong> Double Jump (Unlock at Level 3!)</div>
-            <div class="modal-text"><strong>💎 Collectibles:</strong><br>• <strong>Coins (¥):</strong> Earn bonus points<br>• <strong>Power-ups:</strong> Special abilities to help you</div>
-            <div class="modal-text"><strong>⚡ Power-ups:</strong><br>• 🛡️ Shield: Invincibility for 5 seconds<br>• 🚀 Speed Boost: 2x speed<br>• 🧲 Magnet: Auto-collect coins<br>• ⏱️ Slow Motion: Easier dodging</div>
-            <div class="modal-text"><strong>📊 Progression:</strong><br>• Score points to level up<br>• Higher levels = More challenges<br>• Build combos for bonus points!</div>
+            <div class="modal-text">
+                <strong>🦊 Meet Kitsune:</strong><br>
+                Guide the mystical fox spirit through sacred Japanese gardens!
+            </div>
+            <div class="modal-text">
+                <strong>🎮 Controls:</strong><br>
+                • <strong>Tap/Space/Up Arrow:</strong> Jump<br>
+                • <strong>Swipe Up:</strong> Jump<br>
+                • <strong>Swipe Down:</strong> Duck<br>
+                • <strong>Double Tap:</strong> Double Jump (Unlock at Level 3!)
+            </div>
+            <div class="modal-text">
+                <strong>💎 Collectibles:</strong><br>
+                • <strong>Coins (¥):</strong> Earn bonus points<br>
+                • <strong>Power-ups:</strong> Special abilities to help you
+            </div>
+            <div class="modal-text">
+                <strong>⚡ Power-ups:</strong><br>
+                • 🛡️ Shield: Invincibility for 5 seconds<br>
+                • 🚀 Speed Boost: 2x speed<br>
+                • 🧲 Magnet: Auto-collect coins<br>
+                • ⏱️ Slow Motion: Easier dodging
+            </div>
+            <div class="modal-text">
+                <strong>📊 Progression:</strong><br>
+                • Score points to level up<br>
+                • Higher levels = More challenges<br>
+                • Build combos for bonus points!
+            </div>
             <button class="modal-close" id="closeHowToPlayBtn">Close</button>
         </div>
     </div>
+
+    <!-- About Modal -->
     <div class="modal" id="aboutModal">
         <div class="modal-content">
             <div class="modal-title">About</div>
-            <div style="text-align:center;margin-bottom:20px;"><div style="font-size:4em;">🎌</div></div>
-            <div class="modal-text"><strong>和 ZenFlow Runner</strong> is a peaceful endless runner inspired by traditional Japanese culture and zen philosophy.</div>
-            <div class="modal-text">Run through beautiful Japanese landscapes, collect mystical coins, and embrace the harmony of movement and stillness.</div>
-            <div class="modal-text"><strong>Developer:</strong> Bikram<br><strong>Version:</strong> 1.0.0<br><strong>Theme:</strong> Japanese Zen Culture</div>
-            <div class="modal-text" style="text-align:center;color:#a8727d;font-style:italic;">"Run free, stay calm, be zen." 🌿</div>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="font-size: 4em;">🎌</div>
+            </div>
+            <div class="modal-text">
+                <strong>和 ZenFlow Runner</strong> is a peaceful endless runner inspired by traditional Japanese culture and zen philosophy.
+            </div>
+            <div class="modal-text">
+                Run through beautiful Japanese landscapes, collect mystical coins, and embrace the harmony of movement and stillness.
+            </div>
+            <div class="modal-text">
+                <strong>Developer:</strong> Bikram<br>
+                <strong>Version:</strong> 1.0.0<br>
+                <strong>Theme:</strong> Japanese Zen Culture
+            </div>
+            <div class="modal-text" style="text-align: center; color: #a8727d; font-style: italic;">
+                "Run free, stay calm, be zen." 🌿
+            </div>
             <button class="modal-close" id="closeAboutBtn">Close</button>
         </div>
     </div>
+
+    <!-- Game Screen -->
     <div class="game-screen" id="gameScreen">
         <div class="game-header">
-            <div class="game-stat"><div class="game-stat-label">Score</div><div class="game-stat-value" id="gameScore">0</div></div>
-            <div class="game-stat"><div class="game-stat-label">Level</div><div class="game-stat-value" id="gameLevel">1</div></div>
-            <div class="game-stat"><div class="game-stat-label">Combo</div><div class="game-stat-value" id="gameCombo">0</div></div>
-            <div class="game-stat"><div class="game-stat-label">Coins</div><div class="game-stat-value" id="gameCoins">0</div></div>
+            <div class="game-stat">
+                <div class="game-stat-label">Score</div>
+                <div class="game-stat-value" id="gameScore">0</div>
+            </div>
+            <div class="game-stat">
+                <div class="game-stat-label">Level</div>
+                <div class="game-stat-value" id="gameLevel">1</div>
+            </div>
+            <div class="game-stat">
+                <div class="game-stat-label">Combo</div>
+                <div class="game-stat-value" id="gameCombo">0</div>
+            </div>
+            <div class="game-stat">
+                <div class="game-stat-label">Coins</div>
+                <div class="game-stat-value" id="gameCoins">0</div>
+            </div>
         </div>
         <canvas id="gameCanvas" width="900" height="600"></canvas>
         <div class="game-controls">
@@ -899,6 +999,8 @@
             <button class="game-btn" id="backToMenuBtn">🏠 Menu</button>
         </div>
     </div>
+
+    <!-- Tutorial Overlay -->
     <div class="tutorial-overlay" id="tutorialOverlay">
         <div class="tutorial-box">
             <div class="tutorial-icon" id="tutorialIcon">👆</div>
@@ -906,11 +1008,22 @@
             <button class="tutorial-btn" id="tutorialNextBtn">Got it!</button>
         </div>
     </div>
-    <div class="achievement-toast" id="achievementToast"><div id="achievementText">Achievement Unlocked!</div></div>
-    <div class="powerup-display" id="powerupDisplay"><span class="powerup-icon" id="powerupIcon">🛡️</span><span class="powerup-timer" id="powerupTimer">5s</span></div>
+
+    <!-- Achievement Toast -->
+    <div class="achievement-toast" id="achievementToast">
+        <div id="achievementText">Achievement Unlocked!</div>
+    </div>
+
+    <!-- Power-up Display -->
+    <div class="powerup-display" id="powerupDisplay">
+        <span class="powerup-icon" id="powerupIcon">🛡️</span>
+        <span class="powerup-timer" id="powerupTimer">5s</span>
+    </div>
+
+    <!-- Game Over Modal -->
     <div class="gameover-modal" id="gameoverModal">
         <div class="gameover-title">Game Over</div>
-        <div style="font-size:3em;margin:20px 0;">🦊</div>
+        <div style="font-size: 3em; margin: 20px 0;">🦊</div>
         <div class="gameover-stats">
             <div>Final Score: <strong id="finalScore">0</strong></div>
             <div>Level Reached: <strong id="finalLevel">1</strong></div>
@@ -920,3 +1033,1293 @@
             <button class="gameover-btn" id="playAgainBtn">Play Again</button>
             <button class="gameover-btn" id="backToMenuFromGameoverBtn">Menu</button>
         </div>
+    </div>
+
+    <script>
+        // ============= GAME STATE & CONFIGURATION =============
+        const GameConfig = {
+            canvas: null,
+            ctx: null,
+            width: 900,
+            height: 600,
+            groundY: 500,
+            gravity: 0.8,
+            jumpPower: -16,
+            baseSpeed: 7
+        };
+
+        const GameState = {
+            currentScreen: 'loading',
+            isRunning: false,
+            isPaused: false,
+            score: 0,
+            level: 1,
+            combo: 0,
+            coinsThisGame: 0,
+            playerName: localStorage.getItem('playerName') || 'Guest',
+            playerAvatar: localStorage.getItem('playerAvatar') || '🦊',
+            bestScore: parseInt(localStorage.getItem('bestScore')) || 0,
+            totalGamesPlayed: parseInt(localStorage.getItem('totalGamesPlayed')) || 0,
+            totalCoins: parseInt(localStorage.getItem('totalCoins')) || 0,
+            maxLevel: parseInt(localStorage.getItem('maxLevel')) || 0,
+            soundEnabled: true,
+            musicEnabled: true,
+            firstTime: !localStorage.getItem('hasPlayedBefore'),
+            tutorialStep: 0,
+            achievements: JSON.parse(localStorage.getItem('achievements')) || []
+        };
+
+        const Player = {
+            x: 100,
+            y: GameConfig.groundY - 50,
+            width: 40,
+            height: 50,
+            velocityY: 0,
+            jumping: false,
+            ducking: false,
+            canDoubleJump: false,
+            hasDoubleJumped: false,
+            color: '#ff6b6b',
+            trail: []
+        };
+
+        const Game = {
+            speed: GameConfig.baseSpeed,
+            obstacles: [],
+            coins: [],
+            powerups: [],
+            clouds: [],
+            particles: [],
+            raindrops: [],
+            lastObstacleTime: 0,
+            obstacleInterval: 1500,
+            lastCoinTime: 0,
+            coinInterval: 2000,
+            lastPowerupTime: 0,
+            powerupInterval: 8000,
+            activePowerup: null,
+            powerupEndTime: 0,
+            weather: 'clear',
+            timeOfDay: 'day',
+            backgroundOffset: 0
+        };
+
+        // Touch controls with improved sensitivity
+        let touchStartY = 0;
+        let touchStartX = 0;
+        let touchStartTime = 0;
+        let lastTouchEndTime = 0;
+        const SWIPE_THRESHOLD = 30; // Reduced for better sensitivity
+        const TAP_THRESHOLD = 200; // ms for tap detection
+        const DOUBLE_TAP_THRESHOLD = 300; // ms for double tap
+
+        // Selected avatar
+        let selectedAvatar = localStorage.getItem('playerAvatar') || '🦊';
+
+        // ============= AUDIO SYSTEM =============
+        const AudioSystem = {
+            context: null,
+            
+            init() {
+                try {
+                    this.context = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    console.log('Web Audio API not supported');
+                }
+            },
+
+            playSound(type) {
+                if (!GameState.soundEnabled || !this.context) return;
+                
+                try {
+                    const oscillator = this.context.createOscillator();
+                    const gainNode = this.context.createGain();
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.context.destination);
+
+                    switch(type) {
+                        case 'jump':
+                            oscillator.frequency.value = 500;
+                            gainNode.gain.setValueAtTime(0.3, this.context.currentTime);
+                            gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.15);
+                            oscillator.start(this.context.currentTime);
+                            oscillator.stop(this.context.currentTime + 0.15);
+                            break;
+                        case 'coin':
+                            oscillator.frequency.value = 800;
+                            gainNode.gain.setValueAtTime(0.3, this.context.currentTime);
+                            gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.2);
+                            oscillator.start(this.context.currentTime);
+                            oscillator.stop(this.context.currentTime + 0.2);
+                            break;
+                        case 'powerup':
+                            oscillator.frequency.value = 1000;
+                            gainNode.gain.setValueAtTime(0.3, this.context.currentTime);
+                            gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.3);
+                            oscillator.start(this.context.currentTime);
+                            oscillator.stop(this.context.currentTime + 0.3);
+                            break;
+                        case 'achievement':
+                            oscillator.frequency.value = 700;
+                            gainNode.gain.setValueAtTime(0.3, this.context.currentTime);
+                            gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.4);
+                            oscillator.start(this.context.currentTime);
+                            oscillator.stop(this.context.currentTime + 0.4);
+                            break;
+                        case 'gameover':
+                            oscillator.frequency.value = 200;
+                            gainNode.gain.setValueAtTime(0.4, this.context.currentTime);
+                            gainNode.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.6);
+                            oscillator.start(this.context.currentTime);
+                            oscillator.stop(this.context.currentTime + 0.6);
+                            break;
+                    }
+                } catch (e) {
+                    console.log('Sound playback error');
+                }
+            },
+
+            vibrate(pattern) {
+                if (navigator.vibrate) {
+                    try {
+                        navigator.vibrate(pattern);
+                    } catch (e) {
+                        console.log('Vibration not supported');
+                    }
+                }
+            }
+        };
+
+        // ============= PARTICLE SYSTEM =============
+        function createParticles(x, y, color, count = 15) {
+            for (let i = 0; i < count; i++) {
+                Game.particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 6,
+                    vy: (Math.random() - 0.5) * 6,
+                    size: Math.random() * 4 + 2,
+                    color: color,
+                    alpha: 1,
+                    life: 60
+                });
+            }
+        }
+
+        function updateParticles() {
+            Game.particles = Game.particles.filter(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.2;
+                p.alpha -= 0.02;
+                p.life--;
+                return p.life > 0 && p.alpha > 0;
+            });
+        }
+
+        function drawParticles() {
+            Game.particles.forEach(p => {
+                GameConfig.ctx.globalAlpha = p.alpha;
+                GameConfig.ctx.fillStyle = p.color;
+                GameConfig.ctx.fillRect(p.x, p.y, p.size, p.size);
+            });
+            GameConfig.ctx.globalAlpha = 1;
+        }
+
+        // ============= BACKGROUND SYSTEM =============
+        function initClouds() {
+            for (let i = 0; i < 8; i++) {
+                Game.clouds.push({
+                    x: Math.random() * GameConfig.width,
+                    y: Math.random() * 150,
+                    width: 60 + Math.random() * 50,
+                    speed: 0.3 + Math.random() * 0.4
+                });
+            }
+        }
+
+        function updateWeather() {
+            if (GameState.level >= 5 && Math.random() < 0.002) {
+                Game.weather = Game.weather === 'clear' ? 'rain' : 'clear';
+            }
+            
+            if (GameState.level >= 7) {
+                Game.timeOfDay = GameState.level % 2 === 0 ? 'night' : 'day';
+            }
+        }
+
+        function drawBackground() {
+            const ctx = GameConfig.ctx;
+            
+            // Sky gradient based on time of day
+            const gradient = ctx.createLinearGradient(0, 0, 0, GameConfig.height);
+            if (Game.timeOfDay === 'night') {
+                gradient.addColorStop(0, '#1a1a2e');
+                gradient.addColorStop(0.5, '#16213e');
+                gradient.addColorStop(1, '#0f3460');
+            } else {
+                gradient.addColorStop(0, '#87CEEB');
+                gradient.addColorStop(0.5, '#E0F6FF');
+                gradient.addColorStop(1, '#FFF8DC');
+            }
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, GameConfig.width, GameConfig.height);
+
+            // Mountains
+            ctx.fillStyle = Game.timeOfDay === 'night' ? '#2c3e50' : '#8B7355';
+            ctx.beginPath();
+            ctx.moveTo(0, GameConfig.groundY - 50);
+            for (let i = 0; i <= GameConfig.width; i += 50) {
+                ctx.lineTo(i, GameConfig.groundY - 100 - Math.sin(i * 0.02 + Game.backgroundOffset * 0.001) * 30);
+            }
+            ctx.lineTo(GameConfig.width, GameConfig.groundY);
+            ctx.lineTo(0, GameConfig.groundY);
+            ctx.closePath();
+            ctx.fill();
+
+            // Clouds
+            ctx.fillStyle = Game.timeOfDay === 'night' ? 'rgba(200, 200, 220, 0.3)' : 'rgba(255, 255, 255, 0.8)';
+            Game.clouds.forEach(cloud => {
+                ctx.beginPath();
+                ctx.arc(cloud.x, cloud.y, 20, 0, Math.PI * 2);
+                ctx.arc(cloud.x + 25, cloud.y, 28, 0, Math.PI * 2);
+                ctx.arc(cloud.x + 50, cloud.y, 22, 0, Math.PI * 2);
+                ctx.fill();
+                
+                cloud.x -= cloud.speed;
+                if (cloud.x < -cloud.width) {
+                    cloud.x = GameConfig.width + Math.random() * 200;
+                }
+            });
+
+            // Rain
+            if (Game.weather === 'rain') {
+                if (Math.random() < 0.3) {
+                    Game.raindrops.push({
+                        x: Math.random() * GameConfig.width,
+                        y: 0,
+                        speed: 8 + Math.random() * 4,
+                        length: 10 + Math.random() * 10
+                    });
+                }
+
+                ctx.strokeStyle = 'rgba(200, 200, 255, 0.5)';
+                ctx.lineWidth = 1;
+                Game.raindrops = Game.raindrops.filter(drop => {
+                    ctx.beginPath();
+                    ctx.moveTo(drop.x, drop.y);
+                    ctx.lineTo(drop.x, drop.y + drop.length);
+                    ctx.stroke();
+                    
+                    drop.y += drop.speed;
+                    return drop.y < GameConfig.height;
+                });
+            }
+
+            // Ground
+            const groundGradient = ctx.createLinearGradient(0, GameConfig.groundY, 0, GameConfig.height);
+            groundGradient.addColorStop(0, '#90EE90');
+            groundGradient.addColorStop(1, '#228B22');
+            ctx.fillStyle = groundGradient;
+            ctx.fillRect(0, GameConfig.groundY, GameConfig.width, GameConfig.height - GameConfig.groundY);
+
+            // Ground details
+            ctx.fillStyle = '#7CFC00';
+            for (let i = 0; i < GameConfig.width; i += 40) {
+                const offset = Math.sin((i + Game.backgroundOffset) * 0.1) * 3;
+                ctx.fillRect(i - Game.backgroundOffset % 40, GameConfig.groundY + offset, 20, 3);
+            }
+
+            Game.backgroundOffset += Game.speed * 0.5;
+        }
+
+        // ============= PLAYER SYSTEM =============
+        function drawPlayer() {
+            const ctx = GameConfig.ctx;
+            const x = Player.x;
+            const y = Player.y;
+
+            // Trail effect at high speeds
+            if (Game.activePowerup === 'speed' || GameState.level > 5) {
+                Player.trail.push({ x: x, y: y, alpha: 0.6 });
+                if (Player.trail.length > 5) Player.trail.shift();
+                
+                Player.trail.forEach((t, i) => {
+                    ctx.globalAlpha = t.alpha * (i / Player.trail.length);
+                    ctx.fillStyle = Player.color;
+                    ctx.fillRect(t.x, t.y, Player.width * 0.8, Player.height * 0.8);
+                });
+                ctx.globalAlpha = 1;
+            }
+
+            ctx.save();
+
+            if (Player.ducking) {
+                // Ducking fox
+                ctx.fillStyle = Player.color;
+                ctx.fillRect(x, y + 25, Player.width, Player.height - 25);
+                
+                // Ears
+                ctx.beginPath();
+                ctx.moveTo(x + 5, y + 25);
+                ctx.lineTo(x + 10, y + 15);
+                ctx.lineTo(x + 15, y + 25);
+                ctx.fill();
+                
+                // Eye
+                ctx.fillStyle = '#000';
+                ctx.fillRect(x + 10, y + 30, 6, 6);
+            } else {
+                // Standing fox body
+                ctx.fillStyle = Player.color;
+                ctx.fillRect(x, y, Player.width, Player.height);
+                
+                // Ears
+                ctx.beginPath();
+                ctx.moveTo(x + 5, y);
+                ctx.lineTo(x + 12, y - 15);
+                ctx.lineTo(x + 19, y);
+                ctx.fill();
+                
+                ctx.beginPath();
+                ctx.moveTo(x + 21, y);
+                ctx.lineTo(x + 28, y - 15);
+                ctx.lineTo(x + 35, y);
+                ctx.fill();
+                
+                // White ear tips
+                ctx.fillStyle = '#FFF';
+                ctx.fillRect(x + 10, y - 10, 4, 8);
+                ctx.fillRect(x + 26, y - 10, 4, 8);
+                
+                // Face
+                ctx.fillStyle = '#FFF';
+                ctx.fillRect(x + 8, y + 15, 24, 20);
+                
+                // Eyes
+                ctx.fillStyle = '#000';
+                ctx.fillRect(x + 12, y + 20, 6, 6);
+                ctx.fillRect(x + 22, y + 20, 6, 6);
+                
+                // Nose
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.arc(x + 20, y + 32, 3, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Legs
+                const legMove = Math.sin(Date.now() / 100) * 5;
+                ctx.fillStyle = Player.color;
+                ctx.fillRect(x + 8, y + Player.height, 8, 15 + legMove);
+                ctx.fillRect(x + 24, y + Player.height, 8, 15 - legMove);
+                
+                // Tail
+                ctx.fillStyle = Player.color;
+                const tailWave = Math.sin(Date.now() / 150) * 10;
+                ctx.beginPath();
+                ctx.moveTo(x + Player.width, y + 20);
+                ctx.quadraticCurveTo(x + Player.width + 20 + tailWave, y + 10, x + Player.width + 15, y - 5);
+                ctx.lineWidth = 8;
+                ctx.strokeStyle = Player.color;
+                ctx.stroke();
+                
+                // Tail tip (white)
+                ctx.fillStyle = '#FFF';
+                ctx.beginPath();
+                ctx.arc(x + Player.width + 15, y - 5, 6, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Shield effect
+            if (Game.activePowerup === 'shield') {
+                const time = Date.now() / 200;
+                ctx.strokeStyle = `rgba(100, 200, 255, ${0.5 + Math.sin(time) * 0.3})`;
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(x + Player.width / 2, y + Player.height / 2, Player.width + 10, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+
+            ctx.restore();
+        }
+
+        function updatePlayer() {
+            Player.velocityY += GameConfig.gravity;
+            Player.y += Player.velocityY;
+
+            if (Player.y >= GameConfig.groundY - Player.height) {
+                Player.y = GameConfig.groundY - Player.height;
+                Player.velocityY = 0;
+                Player.jumping = false;
+                Player.hasDoubleJumped = false;
+            }
+
+            // Update color based on level
+            if (GameState.level <= 2) Player.color = '#ff6b6b';
+            else if (GameState.level <= 5) Player.color = '#ff9f43';
+            else if (GameState.level <= 8) Player.color = '#ee5a6f';
+            else Player.color = '#c44569';
+        }
+
+        function jump() {
+            if (!Player.jumping) {
+                Player.velocityY = GameConfig.jumpPower;
+                Player.jumping = true;
+                Player.hasDoubleJumped = false;
+                AudioSystem.playSound('jump');
+                AudioSystem.vibrate(50);
+                createParticles(Player.x + Player.width / 2, Player.y + Player.height, Player.color, 8);
+            } else if (Player.canDoubleJump && !Player.hasDoubleJumped) {
+                Player.velocityY = GameConfig.jumpPower * 0.9;
+                Player.hasDoubleJumped = true;
+                AudioSystem.playSound('jump');
+                AudioSystem.vibrate(50);
+                createParticles(Player.x + Player.width / 2, Player.y + Player.height, '#FFD700', 15);
+            }
+        }
+
+        // ============= OBSTACLE SYSTEM =============
+        function spawnObstacle() {
+            const now = Date.now();
+            if (now - Game.lastObstacleTime > Game.obstacleInterval) {
+                const types = ['torii', 'stone', 'lantern', 'bird'];
+                const type = types[Math.floor(Math.random() * types.length)];
+                
+                let obstacle = {
+                    x: GameConfig.width,
+                    type: type,
+                    width: 35,
+                    height: 45,
+                    y: GameConfig.groundY - 45
+                };
+                
+                if (type === 'bird') {
+                    obstacle.y = GameConfig.groundY - 100 - Math.random() * 80;
+                    obstacle.width = 40;
+                    obstacle.height = 30;
+                } else if (type === 'lantern') {
+                    obstacle.height = 60;
+                    obstacle.y = GameConfig.groundY - 60;
+                }
+                
+                Game.obstacles.push(obstacle);
+                Game.lastObstacleTime = now;
+            }
+        }
+
+        function drawObstacle(obs) {
+            const ctx = GameConfig.ctx;
+            
+            if (obs.type === 'torii') {
+                // Japanese Torii gate
+                ctx.fillStyle = '#8B0000';
+                ctx.fillRect(obs.x, obs.y, 8, obs.height);
+                ctx.fillRect(obs.x + 27, obs.y, 8, obs.height);
+                ctx.fillRect(obs.x - 5, obs.y, 45, 10);
+                ctx.fillRect(obs.x - 3, obs.y + 15, 41, 6);
+            } else if (obs.type === 'stone') {
+                // Stone lantern base
+                ctx.fillStyle = '#696969';
+                ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+                ctx.fillStyle = '#808080';
+                ctx.fillRect(obs.x + 5, obs.y + 5, obs.width - 10, obs.height - 10);
+            } else if (obs.type === 'lantern') {
+                // Japanese lantern
+                ctx.fillStyle = '#8B4513';
+                ctx.fillRect(obs.x + 12, obs.y, 11, obs.height);
+                ctx.fillStyle = '#FFD700';
+                ctx.fillRect(obs.x, obs.y + 15, obs.width, 30);
+                ctx.fillStyle = '#FFA500';
+                ctx.fillRect(obs.x + 5, obs.y + 20, obs.width - 10, 20);
+            } else if (obs.type === 'bird') {
+                // Flying bird
+                const wingFlap = Math.sin(Date.now() / 100) * 8;
+                ctx.fillStyle = '#4a4a4a';
+                ctx.fillRect(obs.x + 10, obs.y, 20, obs.height);
+                
+                // Wings
+                ctx.beginPath();
+                ctx.moveTo(obs.x, obs.y + 10);
+                ctx.lineTo(obs.x + 10, obs.y + 10 + wingFlap);
+                ctx.lineTo(obs.x + 10, obs.y + 20);
+                ctx.fill();
+                
+                ctx.beginPath();
+                ctx.moveTo(obs.x + 40, obs.y + 10);
+                ctx.lineTo(obs.x + 30, obs.y + 10 - wingFlap);
+                ctx.lineTo(obs.x + 30, obs.y + 20);
+                ctx.fill();
+            }
+        }
+
+        // ============= COIN SYSTEM =============
+        function spawnCoin() {
+            const now = Date.now();
+            if (now - Game.lastCoinTime > Game.coinInterval && Math.random() < 0.5) {
+                Game.coins.push({
+                    x: GameConfig.width,
+                    y: GameConfig.groundY - 80 - Math.random() * 120,
+                    radius: 12,
+                    collected: false,
+                    rotation: 0
+                });
+                Game.lastCoinTime = now;
+            }
+        }
+
+        function drawCoin(coin) {
+            const ctx = GameConfig.ctx;
+            coin.rotation += 0.1;
+            
+            ctx.save();
+            ctx.translate(coin.x, coin.y);
+            ctx.rotate(coin.rotation);
+            
+            const pulse = Math.sin(Date.now() / 200) * 2;
+            ctx.fillStyle = '#FFD700';
+            ctx.beginPath();
+            ctx.arc(0, 0, coin.radius + pulse, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#FFA500';
+            ctx.beginPath();
+            ctx.arc(0, 0, coin.radius - 3, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#FFD700';
+            ctx.font = 'bold 16px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('¥', 0, 0);
+            
+            ctx.restore();
+        }
+
+        // ============= POWER-UP SYSTEM =============
+        function spawnPowerup() {
+            const now = Date.now();
+            if (now - Game.lastPowerupTime > Game.powerupInterval && Math.random() < 0.3) {
+                const types = ['shield', 'speed', 'magnet', 'slowmo'];
+                const type = types[Math.floor(Math.random() * types.length)];
+                
+                Game.powerups.push({
+                    x: GameConfig.width,
+                    y: GameConfig.groundY - 120 - Math.random() * 80,
+                    width: 30,
+                    height: 30,
+                    type: type,
+                    rotation: 0
+                });
+                Game.lastPowerupTime = now;
+            }
+        }
+
+        function drawPowerup(powerup) {
+            const ctx = GameConfig.ctx;
+            powerup.rotation += 0.05;
+            
+            ctx.save();
+            ctx.translate(powerup.x + powerup.width / 2, powerup.y + powerup.height / 2);
+            ctx.rotate(powerup.rotation);
+            
+            const glow = Math.sin(Date.now() / 150) * 5;
+            ctx.shadowBlur = 10 + glow;
+            ctx.shadowColor = getPowerupColor(powerup.type);
+            
+            ctx.fillStyle = getPowerupColor(powerup.type);
+            ctx.fillRect(-powerup.width / 2, -powerup.height / 2, powerup.width, powerup.height);
+            
+            ctx.fillStyle = '#FFF';
+            ctx.font = 'bold 20px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(getPowerupIcon(powerup.type), 0, 0);
+            
+            ctx.restore();
+        }
+
+        function getPowerupColor(type) {
+            const colors = {
+                shield: '#00bfff',
+                speed: '#ff6347',
+                magnet: '#9370db',
+                slowmo: '#32cd32'
+            };
+            return colors[type] || '#fff';
+        }
+
+        function getPowerupIcon(type) {
+            const icons = {
+                shield: '🛡',
+                speed: '⚡',
+                magnet: '🧲',
+                slowmo: '⏱'
+            };
+            return icons[type] || '⭐';
+        }
+
+        function activatePowerup(type) {
+            Game.activePowerup = type;
+            Game.powerupEndTime = Date.now() + 5000;
+            
+            document.getElementById('powerupDisplay').classList.add('active');
+            document.getElementById('powerupIcon').textContent = getPowerupIcon(type);
+            
+            AudioSystem.playSound('powerup');
+            AudioSystem.vibrate([50, 50, 50]);
+            
+            updatePowerupTimer();
+        }
+
+        function updatePowerupTimer() {
+            if (!Game.activePowerup) {
+                document.getElementById('powerupDisplay').classList.remove('active');
+                return;
+            }
+            
+            const remaining = Math.max(0, Math.ceil((Game.powerupEndTime - Date.now()) / 1000));
+            document.getElementById('powerupTimer').textContent = remaining + 's';
+            
+            if (remaining <= 0) {
+                Game.activePowerup = null;
+                document.getElementById('powerupDisplay').classList.remove('active');
+            } else {
+                requestAnimationFrame(updatePowerupTimer);
+            }
+        }
+
+        // ============= COLLISION DETECTION =============
+        function checkCollision(rect1, rect2) {
+            return rect1.x < rect2.x + rect2.width &&
+                   rect1.x + rect1.width > rect2.x &&
+                   rect1.y < rect2.y + rect2.height &&
+                   rect1.y + rect1.height > rect2.y;
+        }
+
+        // ============= DIFFICULTY & PROGRESSION =============
+        function updateDifficulty() {
+            const oldLevel = GameState.level;
+            GameState.level = Math.floor(GameState.score / 500) + 1;
+            
+            if (GameState.level !== oldLevel) {
+                showAchievement(`🎉 Level ${GameState.level} Reached!`);
+                
+                if (GameState.level === 3) {
+                    Player.canDoubleJump = true;
+                    showTutorial('🚀', 'Double Jump Unlocked! Tap twice to jump higher!');
+                }
+                
+                if (GameState.level === 5) {
+                    showAchievement('🌧️ Weather System Activated!');
+                }
+                
+                if (GameState.level === 10) {
+                    unlockAchievement('speed_demon', 'Speed Demon - Reached Level 10!');
+                }
+            }
+            
+            // Apply speed boost effect
+            const baseSpeed = GameConfig.baseSpeed + (GameState.level - 1) * 0.7;
+            Game.speed = Game.activePowerup === 'speed' ? baseSpeed * 1.8 : baseSpeed;
+            Game.obstacleInterval = Math.max(800, 1500 - (GameState.level - 1) * 80);
+        }
+
+        // ============= ACHIEVEMENT SYSTEM =============
+        function unlockAchievement(id, text) {
+            if (!GameState.achievements.includes(id)) {
+                GameState.achievements.push(id);
+                localStorage.setItem('achievements', JSON.stringify(GameState.achievements));
+                showAchievement('🏆 ' + text);
+                AudioSystem.playSound('achievement');
+                AudioSystem.vibrate([100, 50, 100, 50, 100]);
+            }
+        }
+
+        function showAchievement(text) {
+            const toast = document.getElementById('achievementToast');
+            document.getElementById('achievementText').textContent = text;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function checkAchievements() {
+            if (GameState.score >= 100 && !GameState.achievements.includes('first_steps')) {
+                unlockAchievement('first_steps', 'First Steps - Scored 100 points!');
+            }
+            if (GameState.combo >= 10 && !GameState.achievements.includes('combo_master')) {
+                unlockAchievement('combo_master', 'Combo Master - 10x Combo!');
+            }
+            if (GameState.coinsThisGame >= 50 && !GameState.achievements.includes('rich_fox')) {
+                unlockAchievement('rich_fox', 'Rich Fox - Collected 50 coins in one game!');
+            }
+        }
+
+        // ============= TUTORIAL SYSTEM =============
+        function showTutorial(icon, text) {
+            if (!GameState.firstTime && GameState.tutorialStep > 3) return;
+            
+            document.getElementById('tutorialIcon').textContent = icon;
+            document.getElementById('tutorialText').textContent = text;
+            document.getElementById('tutorialOverlay').classList.add('active');
+            GameState.isPaused = true;
+        }
+
+        // ============= GAME LOOP =============
+        function gameLoop() {
+            if (!GameState.isRunning || GameState.isPaused) return;
+            
+            const ctx = GameConfig.ctx;
+            ctx.clearRect(0, 0, GameConfig.width, GameConfig.height);
+            
+            // Draw background
+            drawBackground();
+            updateWeather();
+            
+            // Update player
+            updatePlayer();
+            drawPlayer();
+            
+            // Spawn entities
+            spawnObstacle();
+            spawnCoin();
+            spawnPowerup();
+            
+            // Update and draw obstacles
+            Game.obstacles.forEach((obs, index) => {
+                const speedMod = Game.activePowerup === 'slowmo' ? 0.5 : 1;
+                obs.x -= Game.speed * speedMod;
+                drawObstacle(obs);
+                
+                const playerRect = {
+                    x: Player.x + 5,
+                    y: Player.ducking ? Player.y + 25 : Player.y,
+                    width: Player.width - 10,
+                    height: Player.ducking ? Player.height - 25 : Player.height
+                };
+                
+                if (checkCollision(playerRect, obs)) {
+                    if (Game.activePowerup !== 'shield') {
+                        gameOver();
+                    } else {
+                        createParticles(obs.x, obs.y, '#00bfff', 20);
+                        Game.obstacles.splice(index, 1);
+                        GameState.score += 10;
+                        GameState.combo++;
+                    }
+                }
+                
+                if (obs.x + obs.width < 0) {
+                    Game.obstacles.splice(index, 1);
+                    GameState.score += 10;
+                    GameState.combo++;
+                }
+            });
+            
+            // Update and draw coins
+            Game.coins.forEach((coin, index) => {
+                coin.x -= Game.speed;
+                drawCoin(coin);
+                
+                const magnetRange = Game.activePowerup === 'magnet' ? 150 : 40;
+                const distance = Math.sqrt(
+                    Math.pow(coin.x - (Player.x + Player.width / 2), 2) +
+                    Math.pow(coin.y - (Player.y + Player.height / 2), 2)
+                );
+                
+                // Magnet effect - pull coins towards player
+                if (Game.activePowerup === 'magnet' && distance < magnetRange) {
+                    const angle = Math.atan2((Player.y + Player.height / 2) - coin.y, (Player.x + Player.width / 2) - coin.x);
+                    const pullSpeed = 8;
+                    coin.x += Math.cos(angle) * pullSpeed;
+                    coin.y += Math.sin(angle) * pullSpeed;
+                }
+                
+                if (distance < 35 && !coin.collected) {
+                    coin.collected = true;
+                    GameState.score += 50;
+                    GameState.coinsThisGame++;
+                    createParticles(coin.x, coin.y, '#FFD700', 20);
+                    AudioSystem.playSound('coin');
+                    AudioSystem.vibrate(30);
+                    Game.coins.splice(index, 1);
+                }
+                
+                if (coin.x + coin.radius < 0) {
+                    Game.coins.splice(index, 1);
+                }
+            });
+            
+            // Update and draw powerups
+            Game.powerups.forEach((powerup, index) => {
+                const speedMod = Game.activePowerup === 'slowmo' ? 0.5 : (Game.activePowerup === 'speed' ? 1.5 : 1);
+                powerup.x -= Game.speed * (Game.activePowerup === 'slowmo' ? 0.5 : 1);
+                drawPowerup(powerup);
+                
+                const distance = Math.sqrt(
+                    Math.pow(powerup.x - (Player.x + Player.width / 2), 2) +
+                    Math.pow(powerup.y - (Player.y + Player.height / 2), 2)
+                );
+                
+                if (distance < 40) {
+                    activatePowerup(powerup.type);
+                    createParticles(powerup.x, powerup.y, getPowerupColor(powerup.type), 25);
+                    Game.powerups.splice(index, 1);
+                }
+                
+                if (powerup.x + powerup.width < 0) {
+                    Game.powerups.splice(index, 1);
+                }
+            });
+            
+            // Update particles
+            updateParticles();
+            drawParticles();
+            
+            // Update game state
+            GameState.score += 1;
+            updateDifficulty();
+            checkAchievements();
+            
+            // Update UI
+            document.getElementById('gameScore').textContent = GameState.score;
+            document.getElementById('gameLevel').textContent = GameState.level;
+            document.getElementById('gameCombo').textContent = GameState.combo;
+            document.getElementById('gameCoins').textContent = GameState.coinsThisGame;
+            
+            requestAnimationFrame(gameLoop);
+        }
+
+        // ============= GAME OVER =============
+        function gameOver() {
+            GameState.isRunning = false;
+            
+            // Save statistics properly
+            if (GameState.score > GameState.bestScore) {
+                GameState.bestScore = GameState.score;
+                localStorage.setItem('bestScore', GameState.bestScore);
+                showAchievement('🏆 New High Score!');
+            }
+            
+            if (GameState.level > GameState.maxLevel) {
+                GameState.maxLevel = GameState.level;
+                localStorage.setItem('maxLevel', GameState.maxLevel);
+            }
+            
+            GameState.totalGamesPlayed++;
+            GameState.totalCoins += GameState.coinsThisGame;
+            localStorage.setItem('totalGamesPlayed', GameState.totalGamesPlayed);
+            localStorage.setItem('totalCoins', GameState.totalCoins);
+            
+            document.getElementById('finalScore').textContent = GameState.score;
+            document.getElementById('finalLevel').textContent = GameState.level;
+            document.getElementById('finalCoins').textContent = GameState.coinsThisGame;
+            document.getElementById('gameoverModal').classList.add('show');
+            
+            AudioSystem.playSound('gameover');
+            AudioSystem.vibrate([200, 100, 200]);
+        }
+
+        // ============= SCREEN TRANSITIONS =============
+        function showScreen(screenName) {
+            document.querySelectorAll('.loading-screen, .title-screen, .main-menu, .game-screen').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            const screens = {
+                'loading': document.getElementById('loadingScreen'),
+                'title': document.getElementById('titleScreen'),
+                'menu': document.getElementById('mainMenu'),
+                'game': document.getElementById('gameScreen')
+            };
+            
+            if (screens[screenName]) {
+                screens[screenName].classList.add('active');
+            }
+            
+            GameState.currentScreen = screenName;
+        }
+
+        // ============= CANVAS RESIZE =============
+        function resizeCanvas() {
+            const canvas = GameConfig.canvas;
+            const gameScreen = document.getElementById('gameScreen');
+            const header = document.querySelector('.game-header');
+            const controls = document.querySelector('.game-controls');
+            
+            if (gameScreen && header && controls) {
+                const availableHeight = window.innerHeight - header.offsetHeight - controls.offsetHeight;
+                const availableWidth = window.innerWidth;
+                
+                const aspectRatio = GameConfig.width / GameConfig.height;
+                let canvasWidth = availableWidth;
+                let canvasHeight = availableWidth / aspectRatio;
+                
+                if (canvasHeight > availableHeight) {
+                    canvasHeight = availableHeight;
+                    canvasWidth = canvasHeight * aspectRatio;
+                }
+                
+                canvas.style.width = canvasWidth + 'px';
+                canvas.style.height = canvasHeight + 'px';
+            }
+        }
+
+        // ============= INITIALIZATION =============
+        function init() {
+            // Setup canvas
+            GameConfig.canvas = document.getElementById('gameCanvas');
+            GameConfig.ctx = GameConfig.canvas.getContext('2d');
+            
+            // Initialize audio
+            AudioSystem.init();
+            
+            // Initialize background
+            initClouds();
+            
+            // Resize canvas
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            window.addEventListener('orientationchange', () => {
+                setTimeout(resizeCanvas, 100);
+            });
+            
+            // Create sakura petals
+            const sakuraContainer = document.getElementById('sakuraContainer');
+            for (let i = 0; i < 20; i++) {
+                const sakura = document.createElement('div');
+                sakura.className = 'sakura';
+                sakura.style.left = Math.random() * 100 + '%';
+                sakura.style.animationDuration = (5 + Math.random() * 10) + 's';
+                sakura.style.animationDelay = Math.random() * 5 + 's';
+                sakuraContainer.appendChild(sakura);
+            }
+            
+            // Loading screen
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+                showScreen('title');
+            }, 3000);
+            
+            setupEventListeners();
+        }
+
+        // ============= EVENT LISTENERS =============
+        function setupEventListeners() {
+            // Avatar selection
+            document.querySelectorAll('.avatar-option').forEach(avatar => {
+                avatar.addEventListener('click', function() {
+                    document.querySelectorAll('.avatar-option').forEach(a => a.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedAvatar = this.dataset.avatar;
+                });
+            });
+            
+            // Set default avatar selection
+            document.querySelector('.avatar-option[data-avatar="🦊"]').classList.add('selected');
+            
+            // Modal touch scroll handling
+            const modals = ['profileModal', 'howToPlayModal', 'aboutModal'];
+            modals.forEach(modalId => {
+                const modal = document.getElementById(modalId);
+                const modalContent = modal.querySelector('.modal-content');
+                
+                let startY = 0;
+                let currentY = 0;
+                let isDragging = false;
+                
+                modalContent.addEventListener('touchstart', (e) => {
+                    startY = e.touches[0].clientY;
+                    currentY = modalContent.scrollTop;
+                    isDragging = true;
+                }, { passive: true });
+                
+                modalContent.addEventListener('touchmove', (e) => {
+                    if (!isDragging) return;
+                    const touchY = e.touches[0].clientY;
+                    const deltaY = startY - touchY;
+                    modalContent.scrollTop = currentY + deltaY;
+                }, { passive: true });
+                
+                modalContent.addEventListener('touchend', () => {
+                    isDragging = false;
+                }, { passive: true });
+                
+                // Prevent background scroll
+                modal.addEventListener('touchmove', (e) => {
+                    if (e.target === modal) {
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+            });
+            
+            // Enter button
+            document.getElementById('enterBtn').addEventListener('click', () => {
+                if (!localStorage.getItem('playerName') || localStorage.getItem('playerName') === 'Guest') {
+                    document.getElementById('nameInputModal').classList.add('active');
+                } else {
+                    showScreen('menu');
+                }
+            });
+            
+            // Save name and avatar
+            document.getElementById('saveNameBtn').addEventListener('click', () => {
+                const name = document.getElementById('playerNameInput').value.trim() || 'Guest';
+                GameState.playerName = name;
+                GameState.playerAvatar = selectedAvatar;
+                localStorage.setItem('playerName', name);
+                localStorage.setItem('playerAvatar', selectedAvatar);
+                document.getElementById('nameInputModal').classList.remove('active');
+                showScreen('menu');
+            });
+            
+            // Menu buttons
+            document.getElementById('playBtn').addEventListener('click', () => {
+                showScreen('game');
+                setTimeout(() => {
+                    resizeCanvas();
+                    startGame();
+                }, 100);
+            });
+            
+            document.getElementById('profileBtn').addEventListener('click', () => {
+                document.getElementById('profileName').textContent = GameState.playerName;
+                document.getElementById('profileAvatar').textContent = GameState.playerAvatar;
+                document.getElementById('profileBestScore').textContent = GameState.bestScore;
+                document.getElementById('profileGamesPlayed').textContent = GameState.totalGamesPlayed;
+                document.getElementById('profileTotalCoins').textContent = GameState.totalCoins;
+                document.getElementById('profileMaxLevel').textContent = GameState.maxLevel;
+                document.getElementById('profileModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+            
+            document.getElementById('howToPlayBtn').addEventListener('click', () => {
+                document.getElementById('howToPlayModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+            
+            document.getElementById('aboutBtn').addEventListener('click', () => {
+                document.getElementById('aboutModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+            
+            // Close modals
+            document.getElementById('closeProfileBtn').addEventListener('click', () => {
+                document.getElementById('profileModal').classList.remove('active');
+                document.body.style.overflow = '';
+            });
+            
+            document.getElementById('closeHowToPlayBtn').addEventListener('click', () => {
+                document.getElementById('howToPlayModal').classList.remove('active');
+                document.body.style.overflow = '';
+            });
+            
+            document.getElementById('closeAboutBtn').addEventListener('click', () => {
+                document.getElementById('aboutModal').classList.remove('active');
+                document.body.style.overflow = '';
+            });
+            
+            // Game controls
+            document.getElementById('pauseBtn').addEventListener('click', () => {
+                GameState.isPaused = !GameState.isPaused;
+                document.getElementById('pauseBtn').textContent = GameState.isPaused ? '▶️ Resume' : '⏸ Pause';
+                if (!GameState.isPaused) gameLoop();
+            });
+            
+            document.getElementById('muteBtn').addEventListener('click', () => {
+                GameState.soundEnabled = !GameState.soundEnabled;
+                document.getElementById('muteBtn').textContent = GameState.soundEnabled ? '🔊 Sound' : '🔇 Muted';
+            });
+            
+            document.getElementById('backToMenuBtn').addEventListener('click', () => {
+                if (confirm('Return to menu? Your progress will be lost.')) {
+                    resetGame();
+                    showScreen('menu');
+                }
+            });
+            
+            // Game over buttons
+            document.getElementById('playAgainBtn').addEventListener('click', () => {
+                document.getElementById('gameoverModal').classList.remove('show');
+                resetGame();
+                startGame();
+            });
+            
+            document.getElementById('backToMenuFromGameoverBtn').addEventListener('click', () => {
+                document.getElementById('gameoverModal').classList.remove('show');
+                resetGame();
+                showScreen('menu');
+            });
+            
+            // Tutorial
+            document.getElementById('tutorialNextBtn').addEventListener('click', () => {
+                document.getElementById('tutorialOverlay').classList.remove('active');
+                GameState.isPaused = false;
+                GameState.tutorialStep++;
+                
+                if (GameState.tutorialStep === 1) {
+                    localStorage.setItem('hasPlayedBefore', 'true');
+                    GameState.firstTime = false;
+                }
+                
+                gameLoop();
+            });
+            
+            // Keyboard controls
+            document.addEventListener('keydown', (e) => {
+                if (!GameState.isRunning || GameState.isPaused) return;
+                
+                if (e.code === 'Space' || e.code === 'ArrowUp') {
+                    e.preventDefault();
+                    jump();
+                } else if (e.code === 'ArrowDown') {
+                    e.preventDefault();
+                    Player.ducking = true;
+                }
+            });
+            
+            document.addEventListener('keyup', (e) => {
+                if (e.code === 'ArrowDown') {
+                    Player.ducking = false;
+                }
+            });
+            
+            // Touch controls with improved sensitivity
+            GameConfig.canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+            GameConfig.canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+            GameConfig.canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+            
+            // Click to jump
+            GameConfig.canvas.addEventListener('click', () => {
+                if (GameState.isRunning && !GameState.isPaused) {
+                    jump();
+                }
+            });
+        }
+
+        function handleTouchStart(e) {
+            e.preventDefault();
+            if (!GameState.isRunning || GameState.isPaused) return;
+            
+            touchStartY = e.touches[0].clientY;
+            touchStartX = e.touches[0].clientX;
+            touchStartTime = Date.now();
+        }
+
+        function handleTouchMove(e) {
+            e.preventDefault();
+        }
+
+        function handleTouchEnd(e) {
+            e.preventDefault();
+            if (!GameState.isRunning || GameState.isPaused) return;
+            
+            const touchEndY = e.changedTouches[0].clientY;
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndTime = Date.now();
+            const touchDuration = touchEndTime - touchStartTime;
+            
+            const diffY = touchStartY - touchEndY;
+            const diffX = Math.abs(touchStartX - touchEndX);
+            
+            // Check for double tap
+            if (touchDuration < TAP_THRESHOLD && touchEndTime - lastTouchEndTime < DOUBLE_TAP_THRESHOLD) {
+                jump(); // This will trigger double jump if available
+                lastTouchEndTime = 0; // Reset to prevent triple tap
+                return;
+            }
+            
+            // Swipe detection with improved sensitivity
+            if (Math.abs(diffY) > SWIPE_THRESHOLD && diffX < 80) {
+                if (diffY > 0) {
+                    // Swipe up - Jump
+                    jump();
+                } else {
+                    // Swipe down - Duck
+                    Player.ducking = true;
+                    setTimeout(() => { Player.ducking = false; }, 400);
+                }
+            } else if (touchDuration < TAP_THRESHOLD) {
+                // Quick tap - Jump
+                jump();
+            }
+            
+            lastTouchEndTime = touchEndTime;
+        }
+
+        // ============= GAME START & RESET =============
+        function startGame() {
+            resetGame();
+            GameState.isRunning = true;
+            GameState.isPaused = false;
+            
+            if (GameState.firstTime && GameState.tutorialStep === 0) {
+                showTutorial('👆', 'Swipe up or tap to jump!');
+            } else {
+                gameLoop();
+            }
+        }
+
+        function resetGame() {
+            GameState.score = 0;
+            GameState.level = 1;
+            GameState.combo = 0;
+            GameState.coinsThisGame = 0;
+            GameState.isRunning = false;
+            GameState.isPaused = false;
+            
+            Player.x = 100;
+            Player.y = GameConfig.groundY - Player.height;
+            Player.velocityY = 0;
+            Player.jumping = false;
+            Player.ducking = false;
+            Player.canDoubleJump = false;
+            Player.hasDoubleJumped = false;
+            Player.trail = [];
+            
+            Game.speed = GameConfig.baseSpeed;
+            Game.obstacles = [];
+            Game.coins = [];
+            Game.powerups = [];
+            Game.particles = [];
+            Game.raindrops = [];
+            Game.lastObstacleTime = 0;
+            Game.lastCoinTime = 0;
+            Game.lastPowerupTime = 0;
+            Game.activePowerup = null;
+            Game.weather = 'clear';
+            Game.timeOfDay = 'day';
+            Game.backgroundOffset = 0;
+            
+            document.getElementById('gameScore').textContent = '0';
+            document.getElementById('gameLevel').textContent = '1';
+            document.getElementById('gameCombo').textContent = '0';
+            document.getElementById('gameCoins').textContent = '0';
+            document.getElementById('pauseBtn').textContent = '⏸ Pause';
+        }
+
+        // ============= START THE GAME =============
+        window.addEventListener('load', init);
+
+        // Prevent context menu on long press
+        window.addEventListener('contextmenu', (e) => e.preventDefault());
+        
+        // Prevent pull-to-refresh and other gestures
+        document.body.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        }, { passive: false });
+        
+        // Prevent double-tap zoom
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (e) => {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+    </script>
+</body>
+</html>
